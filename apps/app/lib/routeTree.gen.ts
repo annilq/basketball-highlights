@@ -13,6 +13,7 @@ import { Route as appRouteRouteImport } from './../routes/(app)/route'
 import { Route as appIndexRouteImport } from './../routes/(app)/index'
 import { Route as authLoginRouteImport } from './../routes/(auth)/login'
 import { Route as appUsersRouteImport } from './../routes/(app)/users'
+import { Route as appShotDetectionRouteImport } from './../routes/(app)/shot-detection'
 import { Route as appSettingsRouteImport } from './../routes/(app)/settings'
 import { Route as appReportsRouteImport } from './../routes/(app)/reports'
 import { Route as appDashboardRouteImport } from './../routes/(app)/dashboard'
@@ -36,6 +37,11 @@ const authLoginRoute = authLoginRouteImport.update({
 const appUsersRoute = appUsersRouteImport.update({
   id: '/users',
   path: '/users',
+  getParentRoute: () => appRouteRoute,
+} as any)
+const appShotDetectionRoute = appShotDetectionRouteImport.update({
+  id: '/shot-detection',
+  path: '/shot-detection',
   getParentRoute: () => appRouteRoute,
 } as any)
 const appSettingsRoute = appSettingsRouteImport.update({
@@ -70,6 +76,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof appDashboardRoute
   '/reports': typeof appReportsRoute
   '/settings': typeof appSettingsRoute
+  '/shot-detection': typeof appShotDetectionRoute
   '/users': typeof appUsersRoute
   '/login': typeof authLoginRoute
   '/': typeof appIndexRoute
@@ -80,6 +87,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof appDashboardRoute
   '/reports': typeof appReportsRoute
   '/settings': typeof appSettingsRoute
+  '/shot-detection': typeof appShotDetectionRoute
   '/users': typeof appUsersRoute
   '/login': typeof authLoginRoute
   '/': typeof appIndexRoute
@@ -92,6 +100,7 @@ export interface FileRoutesById {
   '/(app)/dashboard': typeof appDashboardRoute
   '/(app)/reports': typeof appReportsRoute
   '/(app)/settings': typeof appSettingsRoute
+  '/(app)/shot-detection': typeof appShotDetectionRoute
   '/(app)/users': typeof appUsersRoute
   '/(auth)/login': typeof authLoginRoute
   '/(app)/': typeof appIndexRoute
@@ -104,6 +113,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/reports'
     | '/settings'
+    | '/shot-detection'
     | '/users'
     | '/login'
     | '/'
@@ -114,6 +124,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/reports'
     | '/settings'
+    | '/shot-detection'
     | '/users'
     | '/login'
     | '/'
@@ -125,6 +136,7 @@ export interface FileRouteTypes {
     | '/(app)/dashboard'
     | '/(app)/reports'
     | '/(app)/settings'
+    | '/(app)/shot-detection'
     | '/(app)/users'
     | '/(auth)/login'
     | '/(app)/'
@@ -163,6 +175,13 @@ declare module '@tanstack/react-router' {
       path: '/users'
       fullPath: '/users'
       preLoaderRoute: typeof appUsersRouteImport
+      parentRoute: typeof appRouteRoute
+    }
+    '/(app)/shot-detection': {
+      id: '/(app)/shot-detection'
+      path: '/shot-detection'
+      fullPath: '/shot-detection'
+      preLoaderRoute: typeof appShotDetectionRouteImport
       parentRoute: typeof appRouteRoute
     }
     '/(app)/settings': {
@@ -209,6 +228,7 @@ interface appRouteRouteChildren {
   appDashboardRoute: typeof appDashboardRoute
   appReportsRoute: typeof appReportsRoute
   appSettingsRoute: typeof appSettingsRoute
+  appShotDetectionRoute: typeof appShotDetectionRoute
   appUsersRoute: typeof appUsersRoute
   appIndexRoute: typeof appIndexRoute
 }
@@ -219,6 +239,7 @@ const appRouteRouteChildren: appRouteRouteChildren = {
   appDashboardRoute: appDashboardRoute,
   appReportsRoute: appReportsRoute,
   appSettingsRoute: appSettingsRoute,
+  appShotDetectionRoute: appShotDetectionRoute,
   appUsersRoute: appUsersRoute,
   appIndexRoute: appIndexRoute,
 }

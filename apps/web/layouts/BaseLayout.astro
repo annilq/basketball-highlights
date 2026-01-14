@@ -7,9 +7,9 @@ export interface Props {
   image?: string;
 }
 
-const { 
-  title = 'React Starter Kit - Modern Full-Stack Web Application', 
-  description = 'Modern full-stack web application template optimized for serverless deployment to CDN edge locations. Built with React, TypeScript, and the latest web technologies.',
+const {
+  title = 'Basketball Highlights AI - AI-Powered Video Editing',
+  description = 'Transform full game footage into engaging basketball highlight reels in minutes with AI-powered automation. Perfect for content creators.',
   image = '/og-image.png'
 } = Astro.props;
 ---
@@ -21,19 +21,19 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
-    
+
     <!-- Primary Meta Tags -->
     <title>{title}</title>
     <meta name="title" content={title} />
     <meta name="description" content={description} />
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={Astro.url} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={new URL(image, Astro.url)} />
-    
+
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={Astro.url} />
@@ -49,7 +49,7 @@ const {
           <div class="flex h-16 items-center justify-between">
             <div class="flex items-center space-x-4">
               <a href="/" class="text-xl font-bold text-primary">
-                React Starter Kit
+                🏀 Highlights AI
               </a>
             </div>
             <nav class="hidden md:flex items-center space-x-6">
@@ -67,19 +67,11 @@ const {
               </a>
             </nav>
             <div class="flex items-center space-x-2">
-              <a 
-                href="https://github.com/kriasoft/react-starter-kit" 
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-8 rounded-md px-3"
-              >
-                GitHub
-              </a>
-              <a 
-                href="https://github.com/kriasoft/react-starter-kit"
+              <a
+                href="/signup"
                 class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-8 px-3"
               >
-                Get Started
+                Start Free
               </a>
             </div>
           </div>
@@ -96,48 +88,48 @@ const {
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div class="space-y-3">
-              <h3 class="font-semibold">React Starter Kit</h3>
+              <h3 class="font-semibold">Basketball Highlights AI</h3>
               <p class="text-sm text-muted-foreground">
-                Modern full-stack web application template optimized for
-                serverless deployment.
+                AI-powered video editing for basketball content creators.
+                Transform games into highlights in minutes.
               </p>
             </div>
             <div class="space-y-3">
-              <h4 class="font-medium">Resources</h4>
+              <h4 class="font-medium">Product</h4>
               <ul class="space-y-2 text-sm text-muted-foreground">
                 <li>
-                  <a href="/docs" class="hover:text-foreground transition-colors">
-                    Documentation
+                  <a href="/features" class="hover:text-foreground transition-colors">
+                    Features
                   </a>
                 </li>
                 <li>
-                  <a href="/examples" class="hover:text-foreground transition-colors">
-                    Examples
+                  <a href="/pricing" class="hover:text-foreground transition-colors">
+                    Pricing
                   </a>
                 </li>
                 <li>
-                  <a href="/templates" class="hover:text-foreground transition-colors">
-                    Templates
+                  <a href="/about" class="hover:text-foreground transition-colors">
+                    About
                   </a>
                 </li>
               </ul>
             </div>
             <div class="space-y-3">
-              <h4 class="font-medium">Community</h4>
+              <h4 class="font-medium">Support</h4>
               <ul class="space-y-2 text-sm text-muted-foreground">
                 <li>
-                  <a href="https://github.com/kriasoft/react-starter-kit" class="hover:text-foreground transition-colors">
-                    GitHub
+                  <a href="/help" class="hover:text-foreground transition-colors">
+                    Help Center
                   </a>
                 </li>
                 <li>
-                  <a href="https://discord.gg/kriasoft" class="hover:text-foreground transition-colors">
-                    Discord
+                  <a href="/contact" class="hover:text-foreground transition-colors">
+                    Contact
                   </a>
                 </li>
                 <li>
-                  <a href="https://twitter.com/kriasoft" class="hover:text-foreground transition-colors">
-                    Twitter
+                  <a href="/faq" class="hover:text-foreground transition-colors">
+                    FAQ
                   </a>
                 </li>
               </ul>
@@ -147,17 +139,12 @@ const {
               <ul class="space-y-2 text-sm text-muted-foreground">
                 <li>
                   <a href="/privacy" class="hover:text-foreground transition-colors">
-                    Privacy
+                    Privacy Policy
                   </a>
                 </li>
                 <li>
                   <a href="/terms" class="hover:text-foreground transition-colors">
-                    Terms
-                  </a>
-                </li>
-                <li>
-                  <a href="https://github.com/kriasoft/react-starter-kit/blob/main/LICENSE" class="hover:text-foreground transition-colors">
-                    License
+                    Terms of Service
                   </a>
                 </li>
               </ul>
@@ -166,10 +153,10 @@ const {
           <div class="border-t mt-6 pt-6">
             <div class="flex flex-col sm:flex-row justify-between items-center">
               <p class="text-sm text-muted-foreground">
-                © 2024 Kriasoft. All rights reserved.
+                © 2025 Basketball Highlights AI. All rights reserved.
               </p>
               <p class="text-sm text-muted-foreground">
-                Built with Astro, React, TypeScript, and Tailwind CSS
+                Made with 🏀 for basketball content creators everywhere
               </p>
             </div>
           </div>

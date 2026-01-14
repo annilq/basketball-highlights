@@ -80,5 +80,6 @@ export type AppContext = {
     resend?: Resend;
     session: AuthSession | null;
     user: AuthUser | null;
+    r2: R2Bucket;
   };
 };

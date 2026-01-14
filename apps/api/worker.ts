@@ -22,6 +22,7 @@ import {
 type CloudflareEnv = {
   HYPERDRIVE_CACHED: Hyperdrive;
   HYPERDRIVE_DIRECT: Hyperdrive;
+  R2_VIDEO_STORAGE: R2Bucket;
 } & Env;
 
 const worker = new Hono<{
@@ -43,10 +44,12 @@ worker.use(async (c, next) => {
   const db = createDb(c.env.HYPERDRIVE_CACHED);
   const dbDirect = createDb(c.env.HYPERDRIVE_DIRECT);
   const auth = createAuth(db, c.env);
+  const r2 = c.env.R2_VIDEO_STORAGE;
 
   c.set("db", db);
   c.set("dbDirect", dbDirect);
   c.set("auth", auth);
+  c.set("r2", r2);
 
   await next();
 });

@@ -2,8 +2,8 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Separator } from '@repo/ui';
 
-const title = "About - React Starter Kit";
-const description = "Learn about React Starter Kit, a production-ready full-stack web application template built with modern technologies.";
+const title = "About - Basketball Highlights AI";
+const description = "Learn how Basketball Highlights AI is revolutionizing the way content creators produce basketball highlight reels.";
 ---
 
 <BaseLayout title={title} description={description}>
@@ -11,12 +11,11 @@ const description = "Learn about React Starter Kit, a production-ready full-stac
     <!-- Hero Section -->
     <div class="text-center mb-16">
       <h1 class="text-4xl font-bold tracking-tight mb-6">
-        About React Starter Kit
+        About Basketball Highlights AI
       </h1>
       <p class="text-xl text-muted-foreground max-w-3xl mx-auto">
-        A production-ready, full-stack web application template that combines
-        modern development practices with cutting-edge technologies to deliver
-        exceptional performance and developer experience.
+        We're on a mission to help content creators produce amazing basketball
+        highlights in a fraction of the time, so you can focus on growing your audience.
       </p>
     </div>
 
@@ -26,20 +25,27 @@ const description = "Learn about React Starter Kit, a production-ready full-stac
         <CardHeader>
           <CardTitle className="text-2xl">Our Mission</CardTitle>
           <CardDescription>
-            Empowering developers to build faster, better web applications
+            Empowering creators with AI-powered video editing tools
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <p class="text-muted-foreground">
-            React Starter Kit was created to bridge the gap between prototype
-            and production. We believe that developers should focus on
-            building great features, not wrestling with configuration and
-            setup.
+            Basketball Highlights AI was built to solve a simple problem: creating
+            highlight reels from full game footage takes too long. Content creators
+            spend hours manually watching, clipping, and editing basketball games
+            to produce content that audiences love.
           </p>
           <p class="text-muted-foreground">
-            Our template provides a solid foundation with best practices,
-            modern tooling, and optimized performance out of the box, so you
-            can ship your ideas faster and with confidence.
+            We believe that technology should do the heavy lifting. Our AI
+            automatically identifies the most exciting moments, creates smooth
+            transitions, and exports in the perfect format for your chosen
+            platform. What used to take hours now takes minutes.
+          </p>
+          <p class="text-muted-foreground">
+            Our mission is to help basketball content creators everywhere produce
+            more, better, faster. Whether you're building a YouTube channel,
+            dominating TikTok, or covering games professionally, we're here to
+            supercharge your workflow.
           </p>
         </CardContent>
       </Card>
@@ -48,176 +54,173 @@ const description = "Learn about React Starter Kit, a production-ready full-stac
     <!-- Key Features -->
     <section class="mb-20">
       <h2 class="text-3xl font-bold tracking-tight mb-8 text-center">
-        What Makes Us Different
+        What Sets Us Apart
       </h2>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <Card client:visible>
           <CardHeader>
-            <CardTitle>🎯 Production-Ready</CardTitle>
+            <CardTitle>🎯 Built for Basketball</CardTitle>
             <CardDescription>
-              Not just a demo, but a real foundation for your applications
+              AI specifically trained on basketball footage
             </CardDescription>
           </CardHeader>
           <CardContent>
             <p class="text-sm text-muted-foreground">
-              Every component, pattern, and configuration has been
-              battle-tested in production environments. Security, performance,
-              and maintainability are built-in from day one.
+              Our AI understands the game. It knows the difference between a routine
+              layup and a thunderous dunk. It recognizes buzzer-beaters, crowd
+              reactions, and momentum shifts. You get highlights that truly capture
+              the excitement of basketball.
             </p>
           </CardContent>
         </Card>
 
         <Card client:visible>
           <CardHeader>
-            <CardTitle>⚡ Edge-First Architecture</CardTitle>
+            <CardTitle>⚡ Lightning Fast</CardTitle>
             <CardDescription>
-              Optimized for global performance at CDN edge locations
+              Full game to highlights in under 5 minutes
             </CardDescription>
           </CardHeader>
           <CardContent>
             <p class="text-sm text-muted-foreground">
-              Built specifically for Cloudflare Workers and edge computing.
-              Your applications run closer to your users for lightning-fast
-              response times.
+              Cloud-based processing means no waiting. Upload your game, grab coffee,
+              and come back to a complete highlight reel. Our infrastructure is
+              optimized for speed, so you can publish content while the game is still
+              fresh in everyone's mind.
             </p>
           </CardContent>
         </Card>
 
         <Card client:visible>
           <CardHeader>
-            <CardTitle>🔧 Developer Experience</CardTitle>
+            <CardTitle>🔧 Creator-Focused</CardTitle>
             <CardDescription>
-              Carefully crafted tooling for maximum productivity
+              Tools designed specifically for content creators
             </CardDescription>
           </CardHeader>
           <CardContent>
             <p class="text-sm text-muted-foreground">
-              Hot reload, TypeScript support, comprehensive testing setup, and
-              intuitive project structure. Everything you need to stay in the
-              flow.
+              We built this for creators, not engineers. Our interface is intuitive
+              and streamlined. Batch process multiple games, customize your branding,
+              and export to any platform with a single click. It just works.
             </p>
           </CardContent>
         </Card>
 
         <Card client:visible>
           <CardHeader>
-            <CardTitle>🌐 Full-Stack Solution</CardTitle>
+            <CardTitle>🎬 Professional Quality</CardTitle>
             <CardDescription>
-              Complete backend and frontend in one cohesive package
+              Highlights that look like they were edited by pros
             </CardDescription>
           </CardHeader>
           <CardContent>
             <p class="text-sm text-muted-foreground">
-              tRPC for type-safe APIs, Better Auth for authentication and
-              database, and WebSocket support for real-time features.
+              Smart transitions, smooth camera work, automatic audio leveling, and
+              color correction - all done automatically. Your audience will think
+              you spent hours editing, but they'll never know it took you minutes.
             </p>
           </CardContent>
         </Card>
       </div>
     </section>
 
-    <!-- Technology Choices -->
+    <!-- Problem & Solution -->
     <section class="mb-20">
       <h2 class="text-3xl font-bold tracking-tight mb-8 text-center">
-        Technology Choices
+        The Problem We're Solving
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <Card client:visible className="bg-muted/20">
+          <CardHeader>
+            <CardTitle>❌ Before: Manual Editing</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul class="space-y-2 text-sm text-muted-foreground">
+              <li>• Watch entire 48+ minute game</li>
+              <li>• Manually identify exciting plays</li>
+              <li>• Clip and arrange each moment</li>
+              <li>• Add transitions and effects manually</li>
+              <li>• Adjust audio levels</li>
+              <li>• Format for different platforms</li>
+              <li>• <strong class="text-foreground">3-5+ hours of work</strong></li>
+            </ul>
+          </CardContent>
+        </Card>
+
+        <Card client:visible className="bg-primary/10 border-primary">
+          <CardHeader>
+            <CardTitle>✅ After: AI-Powered</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul class="space-y-2 text-sm text-muted-foreground">
+              <li>• Upload your game file</li>
+              <li>• AI automatically detects all highlights</li>
+              <li>• Preview and fine-tune selections</li>
+              <li>• Add your branding once</li>
+              <li>• Click export for your platform</li>
+              <li>• Professional quality output</li>
+              <li>• <strong class="text-primary">Under 5 minutes total</strong></li>
+            </ul>
+          </CardContent>
+        </Card>
+      </div>
+    </section>
+
+    <!-- Technology -->
+    <section class="mb-20">
+      <h2 class="text-3xl font-bold tracking-tight mb-8 text-center">
+        Our Technology
       </h2>
 
       <Card client:visible>
         <CardContent className="pt-6">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <h3 class="font-semibold mb-4">Frontend Stack</h3>
+              <h3 class="font-semibold mb-4">AI & Machine Learning</h3>
               <ul class="space-y-2 text-sm text-muted-foreground">
                 <li>
-                  <strong>React 19:</strong> Latest React with concurrent
-                  features
+                  <strong>Computer Vision:</strong> Advanced object detection for
+                  players, ball, and game dynamics
                 </li>
                 <li>
-                  <strong>TypeScript:</strong> Type safety and better
-                  developer experience
+                  <strong>Action Recognition:</strong> Identifies dunks, 3-pointers,
+                  blocks, steals, and more
                 </li>
                 <li>
-                  <strong>Astro:</strong> Lightning-fast static site generation
+                  <strong>Audio Analysis:</strong> Uses crowd noise and commentator
+                  excitement to find key moments
                 </li>
                 <li>
-                  <strong>TanStack Router:</strong> Type-safe routing with
-                  code splitting
-                </li>
-                <li>
-                  <strong>ShadCN UI:</strong> Beautiful, accessible component
-                  library
-                </li>
-                <li>
-                  <strong>Tailwind CSS:</strong> Utility-first CSS framework
+                  <strong>Smart Editing:</strong> Creates smooth transitions and
+                  professional-looking sequences
                 </li>
               </ul>
             </div>
 
             <div>
-              <h3 class="font-semibold mb-4">Backend Stack</h3>
+              <h3 class="font-semibold mb-4">Platform & Infrastructure</h3>
               <ul class="space-y-2 text-sm text-muted-foreground">
                 <li>
-                  <strong>Bun:</strong> Fast JavaScript runtime and package
-                  manager
+                  <strong>Cloud Processing:</strong> Fast, scalable infrastructure
+                  for rapid video processing
                 </li>
                 <li>
-                  <strong>Hono:</strong> Ultra-fast web framework for edge
-                  computing
+                  <strong>Modern Web Technologies:</strong> Built with latest web
+                  frameworks for optimal performance
                 </li>
                 <li>
-                  <strong>tRPC:</strong> End-to-end type safety for APIs
+                  <strong>Secure Storage:</strong> Your footage encrypted and stored
+                  securely in the cloud
                 </li>
                 <li>
-                  <strong>Better Auth:</strong> Authentication
-                </li>
-                <li>
-                  <strong>Cloudflare Workers:</strong> Serverless edge
-                  computing
-                </li>
-                <li>
-                  <strong>WebSockets:</strong> Real-time communication support
+                  <strong>Multi-Format Export:</strong> Optimized for YouTube,
+                  TikTok, Instagram, Twitter, and more
                 </li>
               </ul>
             </div>
-          </div>
-        </CardContent>
-      </Card>
-    </section>
-
-    <!-- Team Section -->
-    <section class="mb-20">
-      <h2 class="text-3xl font-bold tracking-tight mb-8 text-center">
-        Built by Kriasoft
-      </h2>
-
-      <Card client:visible>
-        <CardContent className="pt-6 text-center">
-          <p class="text-muted-foreground mb-6">
-            React Starter Kit is maintained by Kriasoft, a team of experienced
-            developers passionate about modern web technologies and developer
-            experience.
-          </p>
-
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button asChild client:visible>
-              <a
-                href="https://github.com/kriasoft"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Visit Kriasoft on GitHub
-              </a>
-            </Button>
-            <Button variant="outline" asChild client:visible>
-              <a
-                href="https://kriasoft.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Learn More About Kriasoft
-              </a>
-            </Button>
           </div>
         </CardContent>
       </Card>
@@ -228,30 +231,22 @@ const description = "Learn about React Starter Kit, a production-ready full-stac
     <!-- CTA Section -->
     <section class="text-center">
       <h2 class="text-3xl font-bold tracking-tight mb-4">
-        Ready to Get Started?
+        Ready to Transform Your Workflow?
       </h2>
       <p class="text-muted-foreground text-lg mb-8 max-w-2xl mx-auto">
-        Join thousands of developers who have chosen React Starter Kit for
-        their next project.
+        Join thousands of basketball content creators who are saving hours of
+        editing time every week with Basketball Highlights AI.
       </p>
 
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
         <Button size="lg" asChild client:visible>
-          <a
-            href="https://github.com/kriasoft/react-starter-kit"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Get Started Now
+          <a href="/pricing">
+            Start Free Trial
           </a>
         </Button>
         <Button variant="outline" size="lg" asChild client:visible>
-          <a
-            href="https://github.com/kriasoft/react-starter-kit/discussions"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Join the Community
+          <a href="/features">
+            Explore Features
           </a>
         </Button>
       </div>

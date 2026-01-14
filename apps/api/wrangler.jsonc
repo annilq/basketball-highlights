@@ -25,6 +25,13 @@
     { "binding": "HYPERDRIVE_DIRECT", "id": "your-hyperdrive-direct-id-here" }
   ],
   "kv_namespaces": [],
+  "r2_buckets": [
+    {
+      "binding": "R2_VIDEO_STORAGE",
+      "bucket_name": "basketball-highlights-videos",
+      "preview_bucket_name": "basketball-highlights-videos-preview"
+    }
+  ],
 
   "env": {
     // [ENV:DEVELOPMENT]

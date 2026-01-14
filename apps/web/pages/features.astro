@@ -2,140 +2,173 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui';
 
-const title = "Features - React Starter Kit";
-const description = "Explore all the powerful features that make React Starter Kit the perfect foundation for your next project.";
+const title = "Features - Basketball Highlights AI";
+const description = "Discover powerful AI features that help you create engaging basketball highlight reels in minutes, not hours.";
 
 const featureCategories = [
   {
-    title: "Developer Experience",
-    icon: "🛠️",
+    title: "AI & Automation",
+    icon: "🤖",
     features: [
       {
-        title: "TypeScript First",
-        description: "Full TypeScript support with strict type checking and IntelliSense"
+        title: "Smart Play Detection",
+        description: "AI automatically identifies dunks, three-pointers, blocks, and exciting moments"
       },
       {
-        title: "Hot Module Replacement",
-        description: "Instant feedback with fast refresh and state preservation"
+        title: "Automatic Highlight Selection",
+        description: "Intelligent algorithms pick the most engaging plays from full game footage"
       },
       {
-        title: "Monorepo Structure",
-        description: "Organized workspace management with Bun workspaces"
+        title: "Crowd Noise Analysis",
+        description: "Uses audio cues to find crowd-pleasing moments and buzzer-beaters"
       },
       {
-        title: "Code Generation",
-        description: "Automated route generation and type inference"
+        title: "Player & Team Recognition",
+        description: "Identifies key players and teams for automated tagging and organization"
       }
     ]
   },
   {
-    title: "Performance",
+    title: "Export Options",
+    icon: "📤",
+    features: [
+      {
+        title: "Social Platform Optimization",
+        description: "One-click exports for YouTube, TikTok, Instagram, Twitter, and more"
+      },
+      {
+        title: "Multiple Formats",
+        description: "Export in MP4, MOV, and other popular formats with customizable quality"
+      },
+      {
+        title: "Aspect Ratio Support",
+        description: "Automatically resize for 16:9, 9:16, and 1:1 aspect ratios"
+      },
+      {
+        title: "Custom Branding",
+        description: "Add your logo, intro/outro sequences, and watermarks to every export"
+      }
+    ]
+  },
+  {
+    title: "User Experience",
     icon: "⚡",
     features: [
       {
-        title: "Edge Rendering",
-        description: "Server-side rendering at CDN edge locations worldwide"
+        title: "Fast Processing",
+        description: "Cloud-based AI processes full games in under 5 minutes"
       },
       {
-        title: "Code Splitting",
-        description: "Automatic route-based code splitting for optimal loading"
+        title: "Intuitive Interface",
+        description: "Simple, clean interface designed for creators of all skill levels"
       },
       {
-        title: "Asset Optimization",
-        description: "Image optimization, lazy loading, and efficient bundling"
+        title: "Real-time Preview",
+        description: "Preview highlights before exporting and make adjustments on the fly"
       },
       {
-        title: "Zero-Config CDN",
-        description: "Built-in CDN support with Cloudflare Workers"
+        title: "Cloud Storage",
+        description: "All your projects saved securely in the cloud, accessible from anywhere"
       }
     ]
   },
   {
-    title: "Full-Stack Capabilities",
-    icon: "🚀",
+    title: "Creator Tools",
+    icon: "🛠️",
     features: [
       {
-        title: "Type-Safe APIs",
-        description: "End-to-end type safety with tRPC"
+        title: "Batch Processing",
+        description: "Upload multiple games and generate highlights for all at once"
       },
       {
-        title: "Authentication",
-        description: "Built-in auth with Better Auth and session management"
+        title: "Template Library",
+        description: "Pre-made intro/outro templates for quick, professional results"
       },
       {
-        title: "Database Integration",
-        description: "PostgreSQL with Drizzle ORM and migrations"
+        title: "Advanced Editing",
+        description: "Fine-tune AI selections with manual override capabilities"
       },
       {
-        title: "Real-time Support",
-        description: "WebSocket integration for live features"
+        title: "Collaboration",
+        description: "Share projects with team members and work together in real-time"
       }
     ]
   },
   {
-    title: "UI & Design",
-    icon: "🎨",
+    title: "Quality & Performance",
+    icon: "✨",
     features: [
       {
-        title: "Component Library",
-        description: "Pre-built components with ShadCN UI"
+        title: "4K Resolution Support",
+        description: "Process and export in up to 4K quality for professional results"
       },
       {
-        title: "Tailwind CSS v4",
-        description: "Latest Tailwind with automatic class sorting"
+        title: "Smooth Transitions",
+        description: "AI creates professional-looking transitions between clips"
       },
       {
-        title: "Dark Mode",
-        description: "Built-in theme support with system preference detection"
+        title: "Audio Leveling",
+        description: "Automatic volume normalization for consistent audio quality"
       },
       {
-        title: "Responsive Design",
-        description: "Mobile-first approach with adaptive layouts"
+        title: "Color Correction",
+        description: "Smart color enhancement for vibrant, professional-looking footage"
       }
     ]
   },
   {
-    title: "Testing & Quality",
-    icon: "✅",
+    title: "Analytics & Insights",
+    icon: "📊",
     features: [
       {
-        title: "Unit Testing",
-        description: "Vitest setup with coverage reporting"
+        title: "Engagement Metrics",
+        description: "Track which highlights perform best across your platforms"
       },
       {
-        title: "E2E Testing",
-        description: "Playwright integration for browser testing"
+        title: "Processing History",
+        description: "Complete log of all processed games and highlight reels"
       },
       {
-        title: "Type Checking",
-        description: "Strict TypeScript configuration"
+        title: "Storage Analytics",
+        description: "Monitor your cloud storage usage and optimize as needed"
       },
       {
-        title: "Linting & Formatting",
-        description: "ESLint and Prettier pre-configured"
+        title: "Performance Reports",
+        description: "Weekly insights on your content creation efficiency"
       }
+    ]
+  }
+];
+
+const useCases = [
+  {
+    title: "YouTube Content Creators",
+    description: "Build a daily highlight channel with consistent, professional content",
+    benefits: [
+      "Process full games into YouTube-ready 16:9 highlights",
+      "Add custom branding and intros for channel consistency",
+      "Generate multiple highlight reels from one game (top 5 plays, player-specific, etc.)",
+      "Schedule exports for automated publishing workflows"
     ]
   },
   {
-    title: "Deployment & DevOps",
-    icon: "☁️",
-    features: [
-      {
-        title: "CI/CD Pipeline",
-        description: "GitHub Actions workflow included"
-      },
-      {
-        title: "Infrastructure as Code",
-        description: "Terraform configuration for Cloudflare"
-      },
-      {
-        title: "Environment Management",
-        description: "Multi-environment support with .env files"
-      },
-      {
-        title: "Monitoring",
-        description: "Built-in error tracking and analytics"
-      }
+    title: "TikTok & Reels Creators",
+    description: "Create viral short-form basketball content at scale",
+    benefits: [
+      "Auto-extract viral-worthy clips in perfect 9:16 vertical format",
+      "Trending audio suggestions for your highlights",
+      "Rapid batch processing for multiple games per day",
+      "Optimized captions and effects for maximum engagement"
+    ]
+  },
+  {
+    title: "Sports Media & News",
+    description: "Cover games quickly and efficiently with professional-quality highlights",
+    benefits: [
+      "Turnaround full game coverage in under 10 minutes",
+      "Multi-team batch processing for comprehensive coverage",
+      "Professional templates for news-style presentation",
+      "Consistent branding across all team coverage"
     ]
   }
 ];
@@ -146,11 +179,11 @@ const featureCategories = [
     <!-- Hero Section -->
     <div class="text-center mb-16">
       <h1 class="text-4xl font-bold tracking-tight mb-6">
-        Powerful Features for Modern Development
+        Powerful Features for Basketball Content Creators
       </h1>
       <p class="text-xl text-muted-foreground max-w-3xl mx-auto">
-        Everything you need to build, test, and deploy production-ready web applications
-        with confidence and speed.
+        Everything you need to transform full game footage into engaging highlight
+        reels with AI-powered automation and professional quality output.
       </p>
     </div>
 
@@ -161,7 +194,7 @@ const featureCategories = [
           <span class="text-4xl mr-4">{category.icon}</span>
           <h2 class="text-3xl font-bold tracking-tight">{category.title}</h2>
         </div>
-        
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           {category.features.map((feature) => (
             <Card client:visible>
@@ -175,74 +208,90 @@ const featureCategories = [
       </section>
     ))}
 
-    <!-- Tech Stack Detail -->
+    <!-- Use Cases Section -->
     <section class="mb-20 bg-muted/20 rounded-lg p-12">
-      <h2 class="text-3xl font-bold tracking-tight mb-8 text-center">
-        Built with Best-in-Class Technologies
+      <h2 class="text-3xl font-bold tracking-tight mb-4 text-center">
+        Built for Every Type of Content Creator
       </h2>
-      
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-        {[
-          { name: "React 19", category: "UI Framework" },
-          { name: "TypeScript 5.9", category: "Language" },
-          { name: "Astro", category: "Static Site Gen" },
-          { name: "Bun", category: "Runtime" },
-          { name: "Vite", category: "Build Tool" },
-          { name: "TanStack Router", category: "Routing" },
-          { name: "tRPC", category: "API Layer" },
-          { name: "Hono", category: "Web Framework" },
-          { name: "ShadCN UI", category: "Components" },
-          { name: "Tailwind CSS", category: "Styling" },
-          { name: "Drizzle ORM", category: "Database" },
-          { name: "PostgreSQL", category: "Database" },
-          { name: "Better Auth", category: "Authentication" },
-          { name: "Cloudflare", category: "Platform" },
-          { name: "Vitest", category: "Testing" },
-          { name: "Terraform", category: "Infrastructure" }
-        ].map((tech) => (
-          <div class="bg-background rounded-lg p-4 border">
-            <div class="font-semibold">{tech.name}</div>
-            <div class="text-xs text-muted-foreground">{tech.category}</div>
-          </div>
+      <p class="text-muted-foreground text-lg mb-12 text-center max-w-2xl mx-auto">
+        Whether you're building a YouTube channel, dominating TikTok, or covering games for media,
+        our AI adapts to your workflow.
+      </p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {useCases.map((useCase) => (
+          <Card client:visible>
+            <CardHeader>
+              <CardTitle className="text-xl">{useCase.title}</CardTitle>
+              <CardDescription>{useCase.description}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ul class="space-y-3">
+                {useCase.benefits.map((benefit) => (
+                  <li class="flex items-start">
+                    <svg
+                      class="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    <span class="text-sm text-muted-foreground">{benefit}</span>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
         ))}
       </div>
     </section>
 
-    <!-- Code Example -->
+    <!-- Technical Specs -->
     <section class="mb-20">
       <h2 class="text-3xl font-bold tracking-tight mb-8 text-center">
-        Clean, Modern Code
+        Technical Quality & Performance
       </h2>
-      
-      <Card client:visible>
-        <CardHeader>
-          <CardTitle>Example: Type-Safe API Route</CardTitle>
-          <CardDescription>
-            Define your API with full type safety from backend to frontend
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <pre class="bg-muted p-4 rounded-lg overflow-x-auto">
-            <code class="text-sm">{`// api/router.ts
-export const appRouter = router({
-  user: {
-    get: publicProcedure
-      .input(z.object({ id: z.string() }))
-      .query(async ({ input }) => {
-        return await db.user.findUnique({
-          where: { id: input.id }
-        });
-      }),
-  },
-});
 
-// app/page.tsx
-function UserProfile({ userId }: Props) {
-  const { data } = trpc.user.get.useQuery({ id: userId });
-  
-  return <div>{data?.name}</div>;
-}`}</code>
-          </pre>
+      <Card client:visible>
+        <CardContent className="pt-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="text-center">
+              <div class="text-4xl font-bold text-primary mb-2">4K</div>
+              <div class="text-sm text-muted-foreground">Maximum Resolution</div>
+              <p class="text-xs text-muted-foreground mt-2">Ultra HD quality for professional output</p>
+            </div>
+            <div class="text-center">
+              <div class="text-4xl font-bold text-primary mb-2">5 min</div>
+              <div class="text-sm text-muted-foreground">Average Processing Time</div>
+              <p class="text-xs text-muted-foreground mt-2">Full game to highlights in under 5 minutes</p>
+            </div>
+            <div class="text-center">
+              <div class="text-4xl font-bold text-primary mb-2">99.9%</div>
+              <div class="text-sm text-muted-foreground">Uptime Guarantee</div>
+              <p class="text-xs text-muted-foreground mt-2">Reliable cloud infrastructure</p>
+            </div>
+            <div class="text-center">
+              <div class="text-4xl font-bold text-primary mb-2">MP4, MOV</div>
+              <div class="text-sm text-muted-foreground">Export Formats</div>
+              <p class="text-xs text-muted-foreground mt-2">Support for all popular video formats</p>
+            </div>
+            <div class="text-center">
+              <div class="text-4xl font-bold text-primary mb-2">50+</div>
+              <div class="text-sm text-muted-foreground">Play Types Detected</div>
+              <p class="text-xs text-muted-foreground mt-2">Dunks, 3-pointers, blocks, assists, and more</p>
+            </div>
+            <div class="text-center">
+              <div class="text-4xl font-bold text-primary mb-2">∞</div>
+              <div class="text-sm text-muted-foreground">Batch Processing</div>
+              <p class="text-xs text-muted-foreground mt-2">Process unlimited games simultaneously</p>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </section>
@@ -250,28 +299,25 @@ function UserProfile({ userId }: Props) {
     <!-- CTA Section -->
     <section class="text-center">
       <h2 class="text-3xl font-bold tracking-tight mb-4">
-        Experience the Difference
+        Ready to Create More Content in Less Time?
       </h2>
       <p class="text-muted-foreground text-lg mb-8 max-w-2xl mx-auto">
-        See why developers choose React Starter Kit for their most important projects.
+        Start your free trial today and see how AI-powered highlights can transform
+        your basketball content workflow.
       </p>
 
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
-        <a 
-          href="https://github.com/kriasoft/react-starter-kit"
-          target="_blank"
-          rel="noopener noreferrer"
+        <a
+          href="/pricing"
           class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-10 px-4 py-2"
         >
-          Try It Now
+          Start Free Trial
         </a>
-        <a 
-          href="https://github.com/kriasoft/react-starter-kit#readme"
-          target="_blank"
-          rel="noopener noreferrer"
+        <a
+          href="/"
           class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
         >
-          View Documentation
+          View Demo
         </a>
       </div>
     </section>
