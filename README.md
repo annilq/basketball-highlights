@@ -1,41 +1,3 @@
-# React Starter Kit
-
-<a href="https://github.com/kriasoft/react-starter-kit?sponsor=1"><img src="https://img.shields.io/badge/-GitHub-%23555.svg?logo=github-sponsors" height="20"></a>
-<a href="https://discord.gg/2nKEnKq"><img src="https://img.shields.io/discord/643523529131950086?label=Chat" height="20"></a>
-<a href="https://chatgpt.com/g/g-69564f0a23088191846aa4072bd9397d-react-starter-kit-assistant"><img src="https://img.shields.io/badge/Ask_ChatGPT-10a37f?logo=google+gemini&logoColor=white" height="20"></a>
-<a href="https://github.com/kriasoft/react-starter-kit/stargazers"><img src="https://img.shields.io/github/stars/kriasoft/react-starter-kit.svg?style=social&label=Star&maxAge=3600" height="20"></a>
-<a href="https://x.com/ReactStarter"><img src="https://img.shields.io/twitter/follow/ReactStarter.svg?style=social&label=Follow&maxAge=3600" height="20"></a>
-
-Building modern web applications shouldn't require weeks of configuration hell. This React Starter Kit eliminates the tedious setup work so you can focus on what matters: shipping great products.
-
-Designed for developers who value both speed and quality, this template provides a complete foundation for full-stack applications. From solo projects to team collaborations, it scales with your ambitions while maintaining the developer experience you deserve.
-
-React Starter Kit is proudly supported by these amazing sponsors:
-
-<a href="https://reactstarter.com/s/1"><img src="https://reactstarter.com/s/1.png" height="60" /></a>&nbsp;&nbsp;<a href="https://reactstarter.com/s/2"><img src="https://reactstarter.com/s/2.png" height="60" /></a>&nbsp;&nbsp;<a href="https://reactstarter.com/s/3"><img src="https://reactstarter.com/s/3.png" height="60" /></a>
-
-## What You Get
-
-- **Performance by Default**: Bun runtime delivers exceptional speed across development and production. Your build times will thank you.
-- **Type Safety Throughout**: TypeScript and tRPC create an unbreakable contract between frontend and backend. Catch errors at compile time, not in production.
-- **Modern React Stack**: React 19 with TanStack Router provides type-safe navigation and powerful data fetching patterns. Tailwind CSS v4 handles styling with zero configuration.
-- **Edge-Native Deployment**: Cloudflare Workers ensure your app runs close to users worldwide. Experience sub-100ms response times globally.
-- **Database Ready**: Drizzle ORM with Neon PostgreSQL provides a complete data layer. Multi-tenant support included out of the box.
-- **Developer Experience**: ESLint, Prettier, and VSCode configurations eliminate bikeshedding. Focus on features, not formatting.
-
-## Perfect For
-
-- **SaaS Applications**: Multi-tenant architecture with user management built-in
-- **API-First Products**: tRPC provides excellent developer experience for API development
-- **Global Applications**: Edge deployment ensures fast loading times worldwide
-- **Team Projects**: Monorepo structure scales well with multiple developers
-- **Rapid Prototyping**: Skip configuration and start building features immediately
-
----
-
-This project was bootstrapped with [React Starter Kit](https://github.com/kriasoft/react-starter-kit).
-Be sure to join our [Discord channel](https://discord.gg/2nKEnKq) for assistance.
-
 ## Technology Stack
 
 **Core Runtime & Platform**
@@ -58,6 +20,13 @@ Be sure to join our [Discord channel](https://discord.gg/2nKEnKq) for assistance
 - [tRPC](https://trpc.io/) — End-to-end type safety for APIs
 - [Better Auth](https://www.better-auth.com/) — Modern authentication solution
 
+### AI & Computer Vision
+
+- [Python](https://www.python.org/) — Programming language for AI and machine learning
+- [FastAPI](https://fastapi.tiangolo.com/) — Modern, fast (high-performance) web framework for building APIs
+- [YOLOv8](https://github.com/ultralytics/ultralytics) — State-of-the-art object detection model
+- [OpenCV](https://opencv.org/) — Open source computer vision library
+
 ### Database & ORM
 
 - [Drizzle ORM](https://orm.drizzle.team/) — TypeScript ORM with excellent DX
@@ -78,6 +47,7 @@ This starter kit uses a thoughtfully organized monorepo structure that promotes 
 - [`apps/web/`](./apps/web) — Astro marketing website for static site generation
 - [`apps/api/`](./apps/api) — tRPC API server powered by Hono framework for Cloudflare Workers
 - [`apps/email/`](./apps/email) — React Email templates for authentication and transactional emails
+- [`apps/shot-detector/`](./apps/shot-detector) — Python service for basketball shot detection using YOLOv8
 - [`packages/core/`](./packages/core) — Shared TypeScript types and utilities
 - [`packages/ui/`](./packages/ui) — Shared UI components with shadcn/ui management utilities
 - [`packages/ws-protocol/`](./packages/ws-protocol) — WebSocket protocol template with type-safe messaging
@@ -93,6 +63,8 @@ This starter kit uses a thoughtfully organized monorepo structure that promotes 
 ## Prerequisites
 
 - [Bun](https://bun.sh/) v1.3+ (replaces Node.js and npm)
+- [Python](https://www.python.org/) v3.8+ (for basketball shot detection service)
+- [pip](https://pip.pypa.io/en/stable/) (Python package manager)
 - [VS Code](https://code.visualstudio.com/) with our [recommended extensions](.vscode/extensions.json)
 - [React Developer Tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en) browser extension (recommended)
 - [Cloudflare account](https://dash.cloudflare.com/sign-up) for deployment
@@ -128,11 +100,19 @@ bun dev
 bun --filter @repo/web dev  # Marketing site
 bun --filter @repo/app dev  # Main application
 bun --filter @repo/api dev  # API server
+
+# Start basketball shot detection service (Python)
+cd apps/shot-detector
+uv install
+uv run uvicorn app:app --host 0.0.0.0 --port 8000
 ```
 
 ### 5. Initialize Database
 
 Set up your database connection and schema:
+
+1. Create a Neon PostgreSQL database `CREATE DATABASE dbname;`.
+2. Run the contents of `db/scripts/setup-extensions.sql` to install required extensions.
 
 ```bash
 # Apply migrations to database
@@ -191,42 +171,30 @@ bun api:deploy     # Deploy API server
 bun app:deploy     # Deploy main React app
 ```
 
-Your application will be live on your Cloudflare Workers domain within seconds. The edge-first architecture ensures optimal performance regardless of user location.
+### 3. Deploy Basketball Shot Detection Service
 
-## Backers 💰
+The basketball shot detection service is a Python application that can be deployed to any cloud platform that supports containerized applications, such as Google Cloud Run, AWS ECS, or Azure Container Apps.
 
-<a href="https://reactstarter.com/b/1"><img src="https://reactstarter.com/b/1.png" height="60" /></a>&nbsp;&nbsp;<a href="https://reactstarter.com/b/2"><img src="https://reactstarter.com/b/2.png" height="60" /></a>&nbsp;&nbsp;<a href="https://reactstarter.com/b/3"><img src="https://reactstarter.com/b/3.png" height="60" /></a>&nbsp;&nbsp;<a href="https://reactstarter.com/b/4"><img src="https://reactstarter.com/b/4.png" height="60" /></a>&nbsp;&nbsp;<a href="https://reactstarter.com/b/5"><img src="https://reactstarter.com/b/5.png" height="60" /></a>&nbsp;&nbsp;<a href="https://reactstarter.com/b/6"><img src="https://reactstarter.com/b/6.png" height="60" /></a>&nbsp;&nbsp;<a href="https://reactstarter.com/b/7"><img src="https://reactstarter.com/b/7.png" height="60" /></a>&nbsp;&nbsp;<a href="https://reactstarter.com/b/8"><img src="https://reactstarter.com/b/8.png" height="60" /></a>
+#### Using Docker
 
-## Contributors 👨‍💻
+```bash
+# Build Docker image
+cd apps/shot-detector
+docker build -t basketball-shot-detector .
 
-<a href="https://reactstarter.com/c/1"><img src="https://reactstarter.com/c/1.png" height="60" /></a>&nbsp;&nbsp;<a href="https://reactstarter.com/c/2"><img src="https://reactstarter.com/c/2.png" height="60" /></a>&nbsp;&nbsp;<a href="https://reactstarter.com/c/3"><img src="https://reactstarter.com/c/3.png" height="60" /></a>&nbsp;&nbsp;<a href="https://reactstarter.com/c/4"><img src="https://reactstarter.com/c/4.png" height="60" /></a>&nbsp;&nbsp;<a href="https://reactstarter.com/c/5"><img src="https://reactstarter.com/c/5.png" height="60" /></a>&nbsp;&nbsp;<a href="https://reactstarter.com/c/6"><img src="https://reactstarter.com/c/6.png" height="60" /></a>&nbsp;&nbsp;<a href="https://reactstarter.com/c/7"><img src="https://reactstarter.com/c/7.png" height="60" /></a>&nbsp;&nbsp;<a href="https://reactstarter.com/c/8"><img src="https://reactstarter.com/c/8.png" height="60" /></a>&nbsp;&nbsp;<a href="https://reactstarter.com/c/9"><img src="https://reactstarter.com/c/9.png" height="60" /></a>&nbsp;&nbsp;<a href="https://reactstarter.com/c/10"><img src="https://reactstarter.com/c/10.png" height="60" /></a>&nbsp;&nbsp;<a href="https://reactstarter.com/c/11"><img src="https://reactstarter.com/c/11.png" height="60" /></a>&nbsp;&nbsp;<a href="https://reactstarter.com/c/12"><img src="https://reactstarter.com/c/12.png" height="60" /></a>&nbsp;&nbsp;<a href="https://reactstarter.com/c/13"><img src="https://reactstarter.com/c/13.png" height="60" /></a>
+# Run locally
+docker run -p 8000:8000 basketball-shot-detector
 
-## Need Help?
+# Deploy to Google Cloud Run
+docker tag basketball-shot-detector gcr.io/your-project-id/basketball-shot-detector
+docker push gcr.io/your-project-id/basketball-shot-detector
+gcloud run deploy basketball-shot-detector \
+  --image gcr.io/your-project-id/basketball-shot-detector \
+  --platform managed \
+  --region us-central1 \
+  --allow-unauthenticated
+```
 
-[Ask GPT](https://chatgpt.com/g/g-69564f0a23088191846aa4072bd9397d-react-starter-kit-assistant) — AI assistant trained on this codebase. Try these questions:
+#### Configuration
 
-- [How do I add a new tRPC endpoint?](https://chatgpt.com/g/g-69564f0a23088191846aa4072bd9397d-react-starter-kit-assistant?prompt=How%20do%20I%20add%20a%20new%20tRPC%20endpoint%3F)
-- [Help me create a database table](https://chatgpt.com/g/g-69564f0a23088191846aa4072bd9397d-react-starter-kit-assistant?prompt=Help%20me%20create%20a%20database%20table)
-- [How does authentication work?](https://chatgpt.com/g/g-69564f0a23088191846aa4072bd9397d-react-starter-kit-assistant?prompt=How%20does%20authentication%20work%3F)
-- [Explain the project structure](https://chatgpt.com/g/g-69564f0a23088191846aa4072bd9397d-react-starter-kit-assistant?prompt=Explain%20the%20project%20structure)
-- [How do I deploy to Cloudflare?](https://chatgpt.com/g/g-69564f0a23088191846aa4072bd9397d-react-starter-kit-assistant?prompt=How%20do%20I%20deploy%20to%20Cloudflare%3F)
-- [Add a new page with routing](https://chatgpt.com/g/g-69564f0a23088191846aa4072bd9397d-react-starter-kit-assistant?prompt=Add%20a%20new%20page%20with%20routing)
-- [How do I send emails?](https://chatgpt.com/g/g-69564f0a23088191846aa4072bd9397d-react-starter-kit-assistant?prompt=How%20do%20I%20send%20emails%3F)
-
-## Contributing
-
-We welcome contributions! Whether you're fixing bugs, improving docs, or proposing new features, check out our [Contributing Guide](.github/CONTRIBUTING.md) to get started.
-
-- [Good first issues](https://github.com/kriasoft/react-starter-kit/issues?q=label:"good+first+issue") for beginners
-- [Discord community](https://discord.gg/2nKEnKq) for help and discussions
-- [Open issues](https://github.com/kriasoft/react-starter-kit/issues) needing attention
-
-## License
-
-Copyright © 2014-present Kriasoft. This source code is licensed under the MIT license found in the
-[LICENSE](https://github.com/kriasoft/react-starter-kit/blob/main/LICENSE) file.
-
----
-
-<sup>Made with ♥ by Konstantin Tarkus ([@koistya](https://twitter.com/koistya), [blog](https://medium.com/@koistya))
-and [contributors](https://github.com/kriasoft/react-starter-kit/graphs/contributors).</sup>
+Update the Python service URL in your API service configuration to point to the deployed shot detection service.

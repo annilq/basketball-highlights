@@ -6,6 +6,7 @@ Full-stack React application template optimized for Cloudflare Workers deploymen
 
 - `apps/web/` - Marketing static website
 - `apps/app/` - Main application SPA
+- `apps/shot-detector/` - Python service for basketball shot detection using YOLOv8
 - `apps/api/` - tRPC API server
 - `apps/email/` - React Email templates for authentication emails
 - `packages/core/` - Shared core utilities and WebSocket functionality
@@ -19,7 +20,7 @@ Full-stack React application template optimized for Cloudflare Workers deploymen
 
 - **Runtime:** Bun (>=1.3.0), TypeScript 5.8
 - **Frontend:** React 19, TanStack Router, Jotai, shadcn/ui, Tailwind CSS v4, Better Auth
-- **Backend:** Hono framework, tRPC
+- **Backend:** Hono framework, tRPC with FastAPI for shot detection service
 - **Database:** Neon PostgreSQL, Drizzle ORM
 - **Testing:** Vitest, Happy DOM
 - **Deployment:** Cloudflare Workers, Wrangler
@@ -28,6 +29,10 @@ Full-stack React application template optimized for Cloudflare Workers deploymen
 
 ```bash
 # Development
+cd apps/shot-detector
+uv install
+uv run uvicorn app:app --host 0.0.0.0 --port 8000
+
 bun dev                        # Start web app dev server
 bun web:dev                    # Start web app (shortcut)
 bun api:dev                    # Start API server (shortcut)
