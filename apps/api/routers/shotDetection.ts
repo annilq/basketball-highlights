@@ -4,9 +4,16 @@ import { publicProcedure, router } from "../lib/trpc";
 export const shotDetectionRouter = router({
   detectShots: publicProcedure
     .input(
-      z.object({
-        videoUrl: z.string().url(),
-      }),
+      z.union([
+        z.object({
+          videoUrl: z.url({ message: "videoUrl 必须是有效的 URL" }),
+          video: z.undefined(),
+        }),
+        z.object({
+          videoUrl: z.undefined(),
+          video: z.instanceof(Blob),
+        }),
+      ]),
     )
     .mutation(async ({ input }) => {
       try {
@@ -14,13 +21,24 @@ export const shotDetectionRouter = router({
         // In production, this should be an environment variable
         const pythonServiceUrl = "http://localhost:8000/detect-shots";
 
-        // Fetch the video from the provided URL
-        const videoResponse = await fetch(input.videoUrl);
-        if (!videoResponse.ok) {
-          throw new Error(`Failed to fetch video: ${videoResponse.statusText}`);
-        }
+        let videoBlob: Blob;
 
-        const videoBlob = await videoResponse.blob();
+        // Handle different input types
+        if (input.videoUrl) {
+          // Fetch the video from the provided URL
+          const videoResponse = await fetch(input.videoUrl);
+          if (!videoResponse.ok) {
+            throw new Error(
+              `Failed to fetch video: ${videoResponse.statusText}`,
+            );
+          }
+          videoBlob = await videoResponse.blob();
+        } else if (input.video) {
+          // Use the directly uploaded video file
+          videoBlob = input.video;
+        } else {
+          throw new Error("Either videoUrl or video file must be provided");
+        }
 
         // Create a FormData object to send the video
         const formData = new FormData();

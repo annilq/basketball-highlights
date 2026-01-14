@@ -101,10 +101,16 @@ bun --filter @repo/web dev  # Marketing site
 bun --filter @repo/app dev  # Main application
 bun --filter @repo/api dev  # API server
 
+```
+
 # Start basketball shot detection service (Python)
+
+```bash
 cd apps/shot-detector
-uv install
-uv run uvicorn app:app --host 0.0.0.0 --port 8000
+uv venv
+source .venv/bin/activate
+uv sync
+uv run uvicorn app:app --port 8000
 ```
 
 ### 5. Initialize Database

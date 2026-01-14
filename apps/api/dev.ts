@@ -40,11 +40,11 @@ app.use(secureHeaders());
 app.use(requestId());
 app.use(logger());
 
-// persist:true maintains state across restarts in .wrangler directory
+// persist:false to avoid permission issues with .wrangler directory
 const cf = await getPlatformProxy<CloudflareEnv>({
   configPath: "./wrangler.jsonc",
   environment: args.env ?? "dev",
-  persist: true,
+  persist: false,
 });
 
 // Inject context with two database connections:

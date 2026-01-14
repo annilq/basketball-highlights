@@ -23,12 +23,15 @@ Full-stack React application built with Bun, TypeScript 5.8, React 19, TanStack 
 ## Essential Commands
 
 ```bash
-# Development
-# Start basketball shot detection service (Python)
 cd apps/shot-detector
-uv install
-uv run uvicorn app:app --host 0.0.0.0 --port 8000
+uv venv
+source .venv/bin/activate
+uv sync
+uv run uvicorn app:app --port 8000
+```
 
+```bash
+# Development
 bun dev              # Start all apps
 bun web:dev          # Marketing site
 bun api:dev          # API server

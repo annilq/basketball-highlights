@@ -1,11 +1,8 @@
-import {
-  AlertCircle,
-  CheckCircle2,
-  Download,
-  Film,
-  TrendingUp,
-} from "lucide-react";
-import { createFileRoute } from "@tanstack/react-router";
+import type {
+  ShotDetectionResult,
+  ShotEvent,
+} from "@/lib/queries/shot-detection";
+import { useDetectShotsMutation } from "@/lib/queries/shot-detection";
 import {
   Button,
   Card,
@@ -17,12 +14,18 @@ import {
   Label,
   Separator,
   Skeleton,
+  Switch,
 } from "@repo/ui";
-import type {
-  ShotEvent,
-  ShotDetectionResult,
-} from "@/lib/queries/shot-detection";
-import { useDetectShotsMutation } from "@/lib/queries/shot-detection";
+import { createFileRoute } from "@tanstack/react-router";
+import {
+  AlertCircle,
+  CheckCircle2,
+  Download,
+  Film,
+  TrendingUp,
+  Upload,
+} from "lucide-react";
+import React from "react";
 
 export const Route = createFileRoute("/(app)/shot-detection")({
   component: ShotDetectionPage,
@@ -69,16 +72,30 @@ function ShotEvent({ event }: ShotEventProps) {
 }
 
 function ShotDetectionPage() {
+  const [isFileUpload, setIsFileUpload] = React.useState(false);
+  const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const detectShotsMutation = useDetectShotsMutation();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const videoUrl = formData.get("videoUrl") as string;
 
-    if (videoUrl) {
-      detectShotsMutation.mutate({ videoUrl });
+    if (isFileUpload) {
+      if (selectedFile) {
+        detectShotsMutation.mutate({ file: selectedFile });
+      }
+    } else {
+      const formData = new FormData(e.currentTarget);
+      const videoUrl = formData.get("videoUrl") as string;
+
+      if (videoUrl) {
+        detectShotsMutation.mutate({ videoUrl });
+      }
     }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setSelectedFile(file);
   };
 
   const { data, status, error } = detectShotsMutation;
@@ -103,23 +120,70 @@ function ShotDetectionPage() {
             Upload Video
           </CardTitle>
           <CardDescription>
-            Provide a URL to a basketball game video for shot detection analysis
+            Provide a URL to a basketball game video or upload a file for shot
+            detection analysis
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
             <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="videoUrl">Video URL</Label>
-                <Input
-                  id="videoUrl"
-                  name="videoUrl"
-                  type="url"
-                  placeholder="https://example.com/basketball-game.mp4"
+              {/* Upload method switch */}
+              <div className="flex items-center justify-between space-x-4">
+                <div>
+                  <Label htmlFor="uploadMethod">Use File Upload</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Toggle between URL input and file upload
+                  </p>
+                </div>
+                <Switch
+                  id="uploadMethod"
+                  checked={isFileUpload}
+                  onCheckedChange={setIsFileUpload}
                   disabled={isPending}
-                  required
                 />
               </div>
+
+              {/* URL Input */}
+              {!isFileUpload ? (
+                <div className="space-y-2">
+                  <Label htmlFor="videoUrl">Video URL</Label>
+                  <Input
+                    id="videoUrl"
+                    name="videoUrl"
+                    type="url"
+                    placeholder="https://example.com/basketball-game.mp4"
+                    disabled={isPending}
+                    required
+                  />
+                </div>
+              ) : (
+                /* File Upload */
+                <div className="space-y-2">
+                  <Label htmlFor="videoFile">Video File</Label>
+                  <div className="flex space-x-2">
+                    <Input
+                      id="videoFile"
+                      name="videoFile"
+                      type="file"
+                      accept="video/*"
+                      onChange={handleFileChange}
+                      disabled={isPending}
+                      required
+                      className="flex-1"
+                    />
+                  </div>
+                  {selectedFile && (
+                    <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+                      <Upload className="h-4 w-4" />
+                      <span>
+                        {selectedFile.name} (
+                        {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB)
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
+
               <Button type="submit" disabled={isPending} className="w-full">
                 {isPending ? (
                   <>

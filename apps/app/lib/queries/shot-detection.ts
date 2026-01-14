@@ -9,7 +9,8 @@ import { useMutation, type QueryClient } from "@tanstack/react-query";
 export const shotDetectionQueryKey = ["shotDetection"] as const;
 
 export interface DetectShotsInput {
-  videoUrl: string;
+  videoUrl?: string;
+  file?: File;
 }
 
 export interface ShotEvent {
@@ -28,21 +29,44 @@ export interface ShotDetectionResult {
 
 export function useDetectShotsMutation() {
   return useMutation<ShotDetectionResult, Error, DetectShotsInput>({
-    mutationFn: async ({ videoUrl }) => {
-      const response = await fetch("/api/shot-detection", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ videoUrl }),
-      });
+    mutationFn: async ({ videoUrl, file }) => {
+      // If file is provided, use FormData for file upload
+      if (file) {
+        const formData = new FormData();
+        formData.append("video", file, file.name);
 
-      if (!response.ok) {
-        const error = await response.text();
-        throw new Error(error || "Failed to detect shots");
+        const response = await fetch("/api/shot-detection/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          const error = await response.text();
+          throw new Error(error || "Failed to detect shots");
+        }
+
+        return response.json() as Promise<ShotDetectionResult>;
       }
+      // Otherwise, use JSON for URL input
+      else if (videoUrl) {
+        const response = await fetch("/api/trpc/shotDetection.detectShots", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ videoUrl }),
+        });
 
-      return response.json() as Promise<ShotDetectionResult>;
+        if (!response.ok) {
+          const error = await response.text();
+          throw new Error(error || "Failed to detect shots");
+        }
+
+        const result = await response.json();
+        return result.result.data as ShotDetectionResult;
+      } else {
+        throw new Error("Either videoUrl or file must be provided");
+      }
     },
     onSuccess: (data) => {
       console.log("Shot detection completed:", data);

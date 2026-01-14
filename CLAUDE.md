@@ -28,10 +28,15 @@ Full-stack React application template optimized for Cloudflare Workers deploymen
 ## Essential Commands
 
 ```bash
-# Development
 cd apps/shot-detector
-uv install
-uv run uvicorn app:app --host 0.0.0.0 --port 8000
+uv venv
+source .venv/bin/activate
+uv sync
+uv run uvicorn app:app --port 8000
+```
+
+```bash
+# Development
 
 bun dev                        # Start web app dev server
 bun web:dev                    # Start web app (shortcut)
