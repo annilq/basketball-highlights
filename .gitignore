@@ -67,3 +67,4 @@ docs/.vitepress/dist
 # https://github.com/github/gitignore/blob/master/Global/macOS.gitignore
 .DS_Store
 
+**/shot_detector.egg-info

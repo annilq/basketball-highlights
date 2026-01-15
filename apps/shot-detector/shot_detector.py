@@ -1,32 +1,36 @@
 # Avi Shah - Basketball Shot Detector/Tracker - July 2023
 
-from ultralytics import YOLO
+import math
+
 import cv2
 import cvzone
-import math
 import numpy as np
-from utils import score, detect_down, detect_up, in_hoop_region, clean_hoop_pos, clean_ball_pos, get_device
+from ultralytics import YOLO
+from utils import (clean_ball_pos, clean_hoop_pos, detect_down, detect_up,
+                   get_device, in_hoop_region, score)
 
 
 class ShotDetector:
-    def __init__(self):
+    def __init__(self, model_path="best.pt", video_path="video_test_5.mp4"):
         # Load the YOLO model created from main.py - change text to your relative path
         self.overlay_text = "Waiting..."
-        self.model = YOLO("best.pt")
-        
+        self.model = YOLO(model_path)
+
         # Uncomment this line to accelerate inference. Note that this may cause errors in some setups.
-        #self.model.half()
-        
+        # self.model.half()
+
         self.class_names = ['Basketball', 'Basketball Hoop']
         self.device = get_device()
         # Uncomment line below to use webcam (I streamed to my iPhone using Iriun Webcam)
         # self.cap = cv2.VideoCapture(0)
 
         # Use video - replace text with your video path
-        self.cap = cv2.VideoCapture("video_test_5.mp4")
+        self.cap = cv2.VideoCapture(video_path)
 
-        self.ball_pos = []  # array of tuples ((x_pos, y_pos), frame count, width, height, conf)
-        self.hoop_pos = []  # array of tuples ((x_pos, y_pos), frame count, width, height, conf)
+        # array of tuples ((x_pos, y_pos), frame count, width, height, conf)
+        self.ball_pos = []
+        # array of tuples ((x_pos, y_pos), frame count, width, height, conf)
+        self.hoop_pos = []
 
         self.frame_count = 0
         self.frame = None
@@ -44,8 +48,6 @@ class ShotDetector:
         self.fade_frames = 20
         self.fade_counter = 0
         self.overlay_color = (0, 0, 0)
-
-        self.run()
 
     def run(self):
         while True:
@@ -76,12 +78,14 @@ class ShotDetector:
 
                     # Only create ball points if high confidence or near hoop
                     if (conf > .3 or (in_hoop_region(center, self.hoop_pos) and conf > 0.15)) and current_class == "Basketball":
-                        self.ball_pos.append((center, self.frame_count, w, h, conf))
+                        self.ball_pos.append(
+                            (center, self.frame_count, w, h, conf))
                         cvzone.cornerRect(self.frame, (x1, y1, w, h))
 
                     # Create hoop points if high confidence
                     if conf > .5 and current_class == "Basketball Hoop":
-                        self.hoop_pos.append((center, self.frame_count, w, h, conf))
+                        self.hoop_pos.append(
+                            (center, self.frame_count, w, h, conf))
                         cvzone.cornerRect(self.frame, (x1, y1, w, h))
 
             self.clean_motion()
@@ -92,7 +96,8 @@ class ShotDetector:
             cv2.imshow('Frame', self.frame)
 
             # Close if 'q' is clicked
-            if cv2.waitKey(1) & 0xFF == ord('q'):  # higher waitKey slows video down, use 1 for webcam
+            # higher waitKey slows video down, use 1 for webcam
+            if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
         self.cap.release()
@@ -144,14 +149,18 @@ class ShotDetector:
     def display_score(self):
         # Add text
         text = str(self.makes) + " / " + str(self.attempts)
-        cv2.putText(self.frame, text, (50, 125), cv2.FONT_HERSHEY_SIMPLEX, 3, (255, 255, 255), 6)
-        cv2.putText(self.frame, text, (50, 125), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 0), 3)
+        cv2.putText(self.frame, text, (50, 125),
+                    cv2.FONT_HERSHEY_SIMPLEX, 3, (255, 255, 255), 6)
+        cv2.putText(self.frame, text, (50, 125),
+                    cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 0), 3)
 
         # Add overlay text for shot result if it exists
         if hasattr(self, 'overlay_text'):
             # Calculate text size to position it at the right top corner
-            (text_width, text_height), _ = cv2.getTextSize(self.overlay_text, cv2.FONT_HERSHEY_SIMPLEX, 3, 6)
-            text_x = self.frame.shape[1] - text_width - 40  # Right alignment with some margin
+            (text_width, text_height), _ = cv2.getTextSize(
+                self.overlay_text, cv2.FONT_HERSHEY_SIMPLEX, 3, 6)
+            # Right alignment with some margin
+            text_x = self.frame.shape[1] - text_width - 40
             text_y = 100  # Top margin
 
             # Display overlay text with color (overlay_color)
@@ -162,10 +171,11 @@ class ShotDetector:
         # Gradually fade out color after shot
         if self.fade_counter > 0:
             alpha = 0.2 * (self.fade_counter / self.fade_frames)
-            self.frame = cv2.addWeighted(self.frame, 1 - alpha, np.full_like(self.frame, self.overlay_color), alpha, 0)
+            self.frame = cv2.addWeighted(
+                self.frame, 1 - alpha, np.full_like(self.frame, self.overlay_color), alpha, 0)
             self.fade_counter -= 1
 
 
 if __name__ == "__main__":
-    ShotDetector()
-
+    detector = ShotDetector()
+    detector.run()
