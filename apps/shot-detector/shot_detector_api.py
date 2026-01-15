@@ -125,3 +125,107 @@ class ShotDetectorAPI(ShotDetector):
             "shooting_percentage": round(shooting_percentage, 2),
             "shot_events": shot_events
         }
+
+    def generate_shot_clip(self, video_path, shot_frame, duration=3, output_path=None):
+        """
+        Generate a video clip around a shot frame
+
+        Args:
+            video_path (str): Path to the original video
+            shot_frame (int): Frame number where the shot occurred
+            duration (int): Duration of the clip in seconds (default: 3)
+            output_path (str): Path to save the output clip (default: None)
+
+        Returns:
+            str: Path to the generated clip
+        """
+        # Open the video file
+        cap = cv2.VideoCapture(video_path)
+
+        if not cap.isOpened():
+            raise Exception("Could not open video file")
+
+        # Get video properties
+        fps = cap.get(cv2.CAP_PROP_FPS)
+        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+        # Calculate start and end frames
+        frames_per_clip = int(fps * duration)
+        start_frame = max(0, shot_frame - frames_per_clip // 2)
+        end_frame = start_frame + frames_per_clip
+
+        # Generate output path if not provided
+        if output_path is None:
+            import os
+            base_name = os.path.splitext(os.path.basename(video_path))[0]
+            output_path = f"{base_name}_shot_{shot_frame}.mp4"
+
+        # Define codec and create VideoWriter object
+        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+        out = cv2.VideoWriter(output_path, fourcc, fps, (width, height))
+
+        # Set video to start frame
+        cap.set(cv2.CAP_PROP_POS_FRAMES, start_frame)
+
+        current_frame = start_frame
+        while current_frame < end_frame:
+            ret, frame = cap.read()
+            if not ret:
+                break
+            out.write(frame)
+            current_frame += 1
+
+        # Release resources
+        cap.release()
+        out.release()
+
+        return output_path
+
+    def generate_highlights(self, clip_paths, output_path="highlights.mp4"):
+        """
+        Generate a highlights video by merging multiple shot clips
+
+        Args:
+            clip_paths (list): List of paths to shot clips
+            output_path (str): Path to save the output highlights video
+
+        Returns:
+            str: Path to the generated highlights video
+        """
+        if not clip_paths:
+            raise Exception("No clip paths provided")
+
+        # Read first clip to get properties
+        first_cap = cv2.VideoCapture(clip_paths[0])
+        if not first_cap.isOpened():
+            raise Exception(f"Could not open clip: {clip_paths[0]}")
+
+        fps = first_cap.get(cv2.CAP_PROP_FPS)
+        width = int(first_cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        height = int(first_cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        first_cap.release()
+
+        # Define codec and create VideoWriter object
+        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+        out = cv2.VideoWriter(output_path, fourcc, fps, (width, height))
+
+        # Process each clip
+        for clip_path in clip_paths:
+            cap = cv2.VideoCapture(clip_path)
+            if not cap.isOpened():
+                print(f"Warning: Could not open clip: {clip_path}")
+                continue
+
+            while True:
+                ret, frame = cap.read()
+                if not ret:
+                    break
+                out.write(frame)
+
+            cap.release()
+
+        # Release resources
+        out.release()
+
+        return output_path
