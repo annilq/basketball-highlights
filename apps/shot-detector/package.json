@@ -1,0 +1,10 @@
+{
+  "name": "@repo/shot-detector",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "uv run uvicorn app:app --reload --port 8000",
+    "start": "uv run uvicorn app:app --port 8000"
+  }
+}
