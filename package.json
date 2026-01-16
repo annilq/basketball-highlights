@@ -143,10 +143,11 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,mjs,cjs}": [
-      "bunx eslint --max-warnings=0 --report-unused-disable-directives"
+      "bunx eslint --max-warnings=0 --report-unused-disable-directives",
+      "bunx prettier --write --ignore-unknown"
     ],
-    "*": [
-      "bunx prettier --check --ignore-unknown"
+    "*.{json,jsonc,yml,yaml,md,mdx}": [
+      "bunx prettier --write --ignore-unknown"
     ]
   },
   "dependencies": {
