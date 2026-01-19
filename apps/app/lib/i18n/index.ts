@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import React, { createContext, use, useState } from "react";
+import React, { createContext, use, useEffect, useState } from "react";
 import { enTranslations } from "./translations/en";
 import { zhTranslations } from "./translations/zh";
 import type { I18nContextType, Locale, Translations } from "./types";
@@ -11,8 +11,28 @@ const translations: Record<Locale, Translations> = {
 
 const I18nContext = createContext<I18nContextType | undefined>(undefined);
 
+// 本地存储键名
+const LOCALE_STORAGE_KEY = "app-locale";
+
+// 从本地存储获取语言设置
+const getLocaleFromStorage = (): Locale => {
+  if (typeof window !== "undefined") {
+    const storedLocale = localStorage.getItem(LOCALE_STORAGE_KEY);
+    if (storedLocale === "en" || storedLocale === "zh") {
+      return storedLocale;
+    }
+  }
+  return "en"; // 默认语言
+};
+
 export const I18nProvider = ({ children }: { children: ReactNode }) => {
-  const [locale, setLocale] = useState<Locale>("en");
+  // 初始化时从本地存储读取语言设置
+  const [locale, setLocale] = useState<Locale>(getLocaleFromStorage);
+
+  // 当语言变化时，保存到本地存储
+  useEffect(() => {
+    localStorage.setItem(LOCALE_STORAGE_KEY, locale);
+  }, [locale]);
 
   const t = (key: string, params?: Record<string, string | number>): string => {
     const keys = key.split(".");
