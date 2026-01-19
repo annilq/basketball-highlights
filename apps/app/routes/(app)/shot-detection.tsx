@@ -3,7 +3,11 @@ import type {
   ShotDetectionResult,
   ShotEvent,
 } from "@/lib/queries/shot-detection";
-import { useDetectShotsMutation } from "@/lib/queries/shot-detection";
+import {
+  useDetectShotsMutation,
+  useGenerateHighlightsMutation,
+  useGenerateShotClipMutation,
+} from "@/lib/queries/shot-detection";
 import {
   Button,
   Card,
@@ -50,9 +54,12 @@ function DetectionStats({ label, value, icon: Icon }: DetectionStatsProps) {
 
 interface ShotEventProps {
   event: ShotEvent;
+  videoUrl?: string;
+  selectedFile?: File | null;
+  onGenerateClip?: (event: ShotEvent) => void;
 }
 
-function ShotEvent({ event }: ShotEventProps) {
+function ShotEvent({ event, onGenerateClip }: ShotEventProps) {
   const { t } = useI18n();
   return (
     <div className="flex items-center justify-between rounded-md bg-muted p-3">
@@ -64,14 +71,20 @@ function ShotEvent({ event }: ShotEventProps) {
           {t("shotDetection.frame")}: {event.frame}
         </p>
       </div>
-      <div
-        className={`rounded-full px-3 py-1 text-sm font-medium ${
-          event.is_make
-            ? "bg-green-500/10 text-green-600 dark:bg-green-500/20 dark:text-green-400"
-            : "bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive"
-        }`}
-      >
-        {event.is_make ? t("shotDetection.make") : t("shotDetection.miss")}
+      <div className="flex items-center space-x-2">
+        <Button size="sm" onClick={() => onGenerateClip?.(event)}>
+          <Download className="h-3 w-3 mr-1" />
+          {t("shotDetection.generateClip")}
+        </Button>
+        <div
+          className={`rounded-full px-3 py-1 text-sm font-medium ${
+            event.is_make
+              ? "bg-green-500/10 text-green-600 dark:bg-green-500/20 dark:text-green-400"
+              : "bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive"
+          }`}
+        >
+          {event.is_make ? t("shotDetection.make") : t("shotDetection.miss")}
+        </div>
       </div>
     </div>
   );
@@ -81,21 +94,46 @@ function ShotDetectionPage() {
   const { t } = useI18n();
   const [isFileUpload, setIsFileUpload] = React.useState(false);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
+  const [videoUrl, setVideoUrl] = React.useState<string | undefined>();
+  const videoUrlRef = React.useRef<HTMLInputElement>(null);
   const detectShotsMutation = useDetectShotsMutation();
+  const generateHighlightsMutation = useGenerateHighlightsMutation();
+  const generateShotClipMutation = useGenerateShotClipMutation();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    let currentVideoUrl: string | undefined;
     if (isFileUpload) {
       if (selectedFile) {
         detectShotsMutation.mutate({ file: selectedFile });
       }
     } else {
       const formData = new FormData(e.currentTarget);
-      const videoUrl = formData.get("videoUrl") as string;
+      currentVideoUrl = formData.get("videoUrl") as string;
+      setVideoUrl(currentVideoUrl);
 
-      if (videoUrl) {
-        detectShotsMutation.mutate({ videoUrl });
+      if (currentVideoUrl) {
+        detectShotsMutation.mutate({ videoUrl: currentVideoUrl });
+      }
+    }
+  };
+
+  const handleGenerateHighlights = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    let currentVideoUrl: string | undefined;
+    if (isFileUpload) {
+      if (selectedFile) {
+        generateHighlightsMutation.mutate({ video: selectedFile });
+      }
+    } else {
+      // Get the latest value from the input using ref
+      currentVideoUrl = videoUrlRef.current?.value || videoUrl;
+      setVideoUrl(currentVideoUrl);
+
+      if (currentVideoUrl && currentVideoUrl.trim() !== "") {
+        generateHighlightsMutation.mutate({ videoUrl: currentVideoUrl });
       }
     }
   };
@@ -103,6 +141,24 @@ function ShotDetectionPage() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setSelectedFile(file);
+  };
+
+  const handleGenerateClip = (event: ShotEvent) => {
+    if (isFileUpload) {
+      if (selectedFile) {
+        generateShotClipMutation.mutate({
+          video: selectedFile,
+          shot_frame: event.frame,
+          duration: 3,
+        });
+      }
+    } else if (videoUrl) {
+      generateShotClipMutation.mutate({
+        videoUrl,
+        shot_frame: event.frame,
+        duration: 3,
+      });
+    }
   };
 
   const { data, status, error } = detectShotsMutation;
@@ -161,6 +217,8 @@ function ShotDetectionPage() {
                     placeholder="https://example.com/basketball-game.mp4"
                     disabled={isPending}
                     required
+                    onChange={(e) => setVideoUrl(e.target.value)}
+                    ref={videoUrlRef}
                   />
                 </div>
               ) : (
@@ -193,19 +251,39 @@ function ShotDetectionPage() {
                 </div>
               )}
 
-              <Button type="submit" disabled={isPending} className="w-full">
-                {isPending ? (
-                  <>
-                    <TrendingUp className="mr-2 h-4 w-4 animate-spin" />
-                    {t("shotDetection.detectingShots")}
-                  </>
-                ) : (
-                  <>
-                    <Film className="mr-2 h-4 w-4" />
-                    {t("common.shotDetection")}
-                  </>
-                )}
-              </Button>
+              <div className="flex space-x-2">
+                <Button type="submit" disabled={isPending} className="flex-1">
+                  {isPending ? (
+                    <>
+                      <TrendingUp className="mr-2 h-4 w-4 animate-spin" />
+                      {t("shotDetection.detectingShots")}
+                    </>
+                  ) : (
+                    <>
+                      <Film className="mr-2 h-4 w-4" />
+                      {t("common.shotDetection")}
+                    </>
+                  )}
+                </Button>
+                <Button
+                  type="button"
+                  disabled={isPending || generateHighlightsMutation.isPending}
+                  className="flex-1"
+                  onClick={handleGenerateHighlights}
+                >
+                  {generateHighlightsMutation.isPending ? (
+                    <>
+                      <TrendingUp className="mr-2 h-4 w-4 animate-spin" />
+                      {t("shotDetection.generatingHighlights")}
+                    </>
+                  ) : (
+                    <>
+                      <Download className="mr-2 h-4 w-4" />
+                      {t("shotDetection.generateHighlights")}
+                    </>
+                  )}
+                </Button>
+              </div>
             </div>
           </form>
 
@@ -306,6 +384,9 @@ function ShotDetectionPage() {
                   <ShotEvent
                     key={`${event.frame}-${event.attempts}`}
                     event={event}
+                    videoUrl={videoUrl}
+                    selectedFile={selectedFile}
+                    onGenerateClip={handleGenerateClip}
                   />
                 ))}
               </div>

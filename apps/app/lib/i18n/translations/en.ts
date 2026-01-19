@@ -281,5 +281,8 @@ export const enTranslations: Translations = {
     frame: "Frame",
     make: "Make",
     miss: "Miss",
+    generateClip: "Generate Clip",
+    generateHighlights: "Generate Highlights",
+    generatingHighlights: "Generating Highlights...",
   },
 };

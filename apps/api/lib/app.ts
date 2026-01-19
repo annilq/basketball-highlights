@@ -55,7 +55,7 @@ app.on(["GET", "POST"], "/api/auth/*", (c) => {
   return auth.handler(c.req.raw);
 });
 
-// File upload route
+// File upload route for shot detection
 app.post("/api/shot-detection/upload", async (c) => {
   try {
     const formData = await c.req.formData();
@@ -111,6 +111,105 @@ app.post("/api/shot-detection/upload", async (c) => {
           makes: 1,
         },
       ],
+    });
+  }
+});
+
+// File upload route for highlights generation
+app.post("/api/shot-detection/generate-highlights", async (c) => {
+  try {
+    const formData = await c.req.formData();
+    const video = formData.get("video");
+    const output_path =
+      (formData.get("output_path") as string) || "highlights.mp4";
+
+    if (!video || typeof video === "string") {
+      return c.json({ error: "No video file provided" }, 400);
+    }
+
+    // Now we know video is a Blob
+    const videoBlob = video as Blob;
+
+    // For now, we'll use a mock URL for the Python service
+    // In production, this should be an environment variable
+    const pythonServiceUrl = "http://localhost:8000/generate-highlights";
+
+    // Create a FormData object to send the video and parameters
+    const formDataToSend = new FormData();
+    formDataToSend.append("video", videoBlob, "video.mp4");
+    formDataToSend.append("output_path", output_path);
+
+    // Call the Python service
+    const highlightsResponse = await fetch(pythonServiceUrl, {
+      method: "POST",
+      body: formDataToSend,
+    });
+
+    if (!highlightsResponse.ok) {
+      throw new Error(
+        `Failed to generate highlights: ${highlightsResponse.statusText}`,
+      );
+    }
+
+    const highlightsResult = await highlightsResponse.json();
+    return c.json(highlightsResult);
+  } catch (error) {
+    console.error("Error generating highlights:", error);
+    // Return mock response for now to allow frontend development
+    return c.json({
+      highlights_path: "mock_highlights.mp4",
+    });
+  }
+});
+
+// File upload route for shot clip generation
+app.post("/api/shot-detection/generate-clip", async (c) => {
+  try {
+    const formData = await c.req.formData();
+    const video = formData.get("video");
+    const shot_frame = parseInt(formData.get("shot_frame") as string);
+    const duration = parseInt(formData.get("duration") as string) || 3;
+
+    if (!video || typeof video === "string") {
+      return c.json({ error: "No video file provided" }, 400);
+    }
+
+    if (isNaN(shot_frame)) {
+      return c.json({ error: "Invalid shot_frame provided" }, 400);
+    }
+
+    // Now we know video is a Blob
+    const videoBlob = video as Blob;
+
+    // For now, we'll use a mock URL for the Python service
+    // In production, this should be an environment variable
+    const pythonServiceUrl = "http://localhost:8000/generate-shot-clip";
+
+    // Create a FormData object to send the video and parameters
+    const formDataToSend = new FormData();
+    formDataToSend.append("video", videoBlob, "video.mp4");
+    formDataToSend.append("shot_frame", shot_frame.toString());
+    formDataToSend.append("duration", duration.toString());
+
+    // Call the Python service
+    const clipResponse = await fetch(pythonServiceUrl, {
+      method: "POST",
+      body: formDataToSend,
+    });
+
+    if (!clipResponse.ok) {
+      throw new Error(
+        `Failed to generate shot clip: ${clipResponse.statusText}`,
+      );
+    }
+
+    const clipResult = await clipResponse.json();
+    return c.json(clipResult);
+  } catch (error) {
+    console.error("Error generating shot clip:", error);
+    // Return mock response for now to allow frontend development
+    return c.json({
+      clip_path: "mock_shot_clip.mp4",
     });
   }
 });

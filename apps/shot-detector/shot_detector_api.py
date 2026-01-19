@@ -182,19 +182,39 @@ class ShotDetectorAPI(ShotDetector):
 
         return output_path
 
-    def generate_highlights(self, clip_paths, output_path="highlights.mp4"):
+    def generate_highlights(self, video_path, output_path="highlights.mp4"):
         """
-        Generate a highlights video by merging multiple shot clips
+        Generate a highlights video by detecting shots and merging made shot clips
 
         Args:
-            clip_paths (list): List of paths to shot clips
+            video_path (str): Path to the original video
             output_path (str): Path to save the output highlights video
 
         Returns:
             str: Path to the generated highlights video
         """
-        if not clip_paths:
-            raise Exception("No clip paths provided")
+        # Detect shots first
+        detection_results = self.detect_shots(video_path)
+        shot_events = detection_results["shot_events"]
+
+        # Filter only made shots
+        made_shots = [event for event in shot_events if event["is_make"]]
+
+        if not made_shots:
+            raise Exception("No made shots detected in the video")
+
+        # Generate clips for each made shot
+        clip_paths = []
+        for i, shot_event in enumerate(made_shots):
+            # Generate temporary clip path
+            import os
+            base_name = os.path.splitext(os.path.basename(video_path))[0]
+            temp_clip_path = f"{base_name}_shot_{shot_event['frame']}_{i}.mp4"
+
+            # Generate clip around the shot frame
+            clip_path = self.generate_shot_clip(
+                video_path, shot_event['frame'], output_path=temp_clip_path)
+            clip_paths.append(clip_path)
 
         # Read first clip to get properties
         first_cap = cv2.VideoCapture(clip_paths[0])
@@ -227,5 +247,13 @@ class ShotDetectorAPI(ShotDetector):
 
         # Release resources
         out.release()
+
+        # Clean up temporary clip files
+        import os
+        for clip_path in clip_paths:
+            try:
+                os.remove(clip_path)
+            except:
+                print(f"Warning: Could not delete temporary clip: {clip_path}")
 
         return output_path

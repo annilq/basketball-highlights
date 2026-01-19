@@ -264,5 +264,8 @@ export const zhTranslations: Translations = {
     frame: "帧",
     make: "命中",
     miss: "未命中",
+    generateClip: "生成片段",
+    generateHighlights: "生成集锦",
+    generatingHighlights: "正在生成集锦...",
   },
 };

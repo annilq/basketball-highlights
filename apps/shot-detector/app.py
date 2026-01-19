@@ -106,38 +106,33 @@ async def generate_shot_clip(
 
 @app.post("/generate-highlights")
 async def generate_highlights(
-    clips: list[UploadFile] = File(...)
+    video: UploadFile = File(...),
+    output_path: str = "highlights.mp4"
 ):
-    """Generate a highlights video by merging multiple shot clips"""
+    """Generate a highlights video by detecting shots and merging made shot clips"""
     try:
-        # Save uploaded clips to temporary files
-        temp_clip_paths = []
-        for clip in clips:
-            with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as temp_file:
-                content = await clip.read()
-                temp_file.write(content)
-                temp_clip_paths.append(temp_file.name)
+        # Save uploaded video to temporary file
+        with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as temp_file:
+            content = await video.read()
+            temp_file.write(content)
+            temp_video_path = temp_file.name
 
         # Generate highlights video
-        highlights_path = detector.generate_highlights(temp_clip_paths)
+        highlights_path = detector.generate_highlights(
+            temp_video_path, output_path=output_path)
 
-        # Clean up temporary files
-        for temp_path in temp_clip_paths:
-            try:
-                os.unlink(temp_path)
-            except:
-                pass
+        # Clean up temporary file
+        os.unlink(temp_video_path)
 
         return {"highlights_path": highlights_path}
 
     except Exception as e:
-        # Clean up temporary files if they exist
-        if 'temp_clip_paths' in locals():
-            for temp_path in temp_clip_paths:
-                try:
-                    os.unlink(temp_path)
-                except:
-                    pass
+        # Clean up temporary file if it exists
+        if 'temp_video_path' in locals():
+            try:
+                os.unlink(temp_video_path)
+            except:
+                pass
 
         raise HTTPException(
             status_code=500, detail=f"Error generating highlights: {str(e)}")

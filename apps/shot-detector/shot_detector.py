@@ -11,7 +11,7 @@ from utils import (clean_ball_pos, clean_hoop_pos, detect_down, detect_up,
 
 
 class ShotDetector:
-    def __init__(self, model_path="best.pt", video_path="video_test_5.mp4"):
+    def __init__(self, model_path="best.pt", video_path=None):
         # Load the YOLO model created from main.py - change text to your relative path
         self.overlay_text = "Waiting..."
         self.model = YOLO(model_path)
@@ -24,8 +24,11 @@ class ShotDetector:
         # Uncomment line below to use webcam (I streamed to my iPhone using Iriun Webcam)
         # self.cap = cv2.VideoCapture(0)
 
-        # Use video - replace text with your video path
-        self.cap = cv2.VideoCapture(video_path)
+        # Only initialize video capture if video_path is provided
+        self.cap = None
+        if video_path:
+            # Use video - replace text with your video path
+            self.cap = cv2.VideoCapture(video_path)
 
         # array of tuples ((x_pos, y_pos), frame count, width, height, conf)
         self.ball_pos = []
