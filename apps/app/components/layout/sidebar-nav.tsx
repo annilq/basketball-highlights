@@ -1,9 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import type { LucideIcon } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
 
 interface SidebarNavItem {
   icon: LucideIcon;
-  label: string;
+  labelKey: string;
   to: string;
 }
 
@@ -12,6 +13,8 @@ interface SidebarNavProps {
 }
 
 export function SidebarNav({ items }: SidebarNavProps) {
+  const { t } = useI18n();
+
   return (
     <nav className="flex-1 p-4 space-y-1">
       {items.map((item) => (
@@ -24,7 +27,7 @@ export function SidebarNav({ items }: SidebarNavProps) {
           }}
         >
           <item.icon className="h-4 w-4" />
-          <span>{item.label}</span>
+          <span>{t(item.labelKey)}</span>
         </Link>
       ))}
     </nav>

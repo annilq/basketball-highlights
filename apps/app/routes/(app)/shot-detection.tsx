@@ -1,3 +1,4 @@
+import { useI18n } from "@/lib/i18n";
 import type {
   ShotDetectionResult,
   ShotEvent,
@@ -52,11 +53,16 @@ interface ShotEventProps {
 }
 
 function ShotEvent({ event }: ShotEventProps) {
+  const { t } = useI18n();
   return (
     <div className="flex items-center justify-between rounded-md bg-muted p-3">
       <div>
-        <p className="font-medium">Shot {event.attempts}</p>
-        <p className="text-sm text-muted-foreground">Frame: {event.frame}</p>
+        <p className="font-medium">
+          {t("shotDetection.shot")} {event.attempts}
+        </p>
+        <p className="text-sm text-muted-foreground">
+          {t("shotDetection.frame")}: {event.frame}
+        </p>
       </div>
       <div
         className={`rounded-full px-3 py-1 text-sm font-medium ${
@@ -65,13 +71,14 @@ function ShotEvent({ event }: ShotEventProps) {
             : "bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive"
         }`}
       >
-        {event.is_make ? "Make" : "Miss"}
+        {event.is_make ? t("shotDetection.make") : t("shotDetection.miss")}
       </div>
     </div>
   );
 }
 
 function ShotDetectionPage() {
+  const { t } = useI18n();
   const [isFileUpload, setIsFileUpload] = React.useState(false);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const detectShotsMutation = useDetectShotsMutation();
@@ -106,22 +113,18 @@ function ShotDetectionPage() {
   return (
     <div className="container mx-auto py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">Basketball Shot Detection</h1>
-        <p className="text-muted-foreground">
-          Upload basketball game footage and let AI detect shots, makes, and
-          shooting statistics.
-        </p>
+        <h1 className="text-3xl font-bold mb-2">{t("shotDetection.title")}</h1>
+        <p className="text-muted-foreground">{t("shotDetection.subtitle")}</p>
       </div>
 
       <Card className="mb-8">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Film className="h-5 w-5" />
-            Upload Video
+            {t("shotDetection.uploadVideo")}
           </CardTitle>
           <CardDescription>
-            Provide a URL to a basketball game video or upload a file for shot
-            detection analysis
+            {t("shotDetection.uploadVideoDescription")}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -130,9 +133,11 @@ function ShotDetectionPage() {
               {/* Upload method switch */}
               <div className="flex items-center justify-between space-x-4">
                 <div>
-                  <Label htmlFor="uploadMethod">Use File Upload</Label>
+                  <Label htmlFor="uploadMethod">
+                    {t("shotDetection.useFileUpload")}
+                  </Label>
                   <p className="text-sm text-muted-foreground">
-                    Toggle between URL input and file upload
+                    {t("shotDetection.toggleUploadMethod")}
                   </p>
                 </div>
                 <Switch
@@ -146,7 +151,9 @@ function ShotDetectionPage() {
               {/* URL Input */}
               {!isFileUpload ? (
                 <div className="space-y-2">
-                  <Label htmlFor="videoUrl">Video URL</Label>
+                  <Label htmlFor="videoUrl">
+                    {t("shotDetection.videoUrl")}
+                  </Label>
                   <Input
                     id="videoUrl"
                     name="videoUrl"
@@ -159,7 +166,9 @@ function ShotDetectionPage() {
               ) : (
                 /* File Upload */
                 <div className="space-y-2">
-                  <Label htmlFor="videoFile">Video File</Label>
+                  <Label htmlFor="videoFile">
+                    {t("shotDetection.videoFile")}
+                  </Label>
                   <div className="flex space-x-2">
                     <Input
                       id="videoFile"
@@ -188,12 +197,12 @@ function ShotDetectionPage() {
                 {isPending ? (
                   <>
                     <TrendingUp className="mr-2 h-4 w-4 animate-spin" />
-                    Detecting Shots...
+                    {t("shotDetection.detectingShots")}
                   </>
                 ) : (
                   <>
                     <Film className="mr-2 h-4 w-4" />
-                    Detect Shots
+                    {t("common.shotDetection")}
                   </>
                 )}
               </Button>
@@ -204,10 +213,11 @@ function ShotDetectionPage() {
             <div className="mt-4 flex items-start gap-3 rounded-lg bg-destructive/10 p-4 text-destructive dark:bg-destructive/20">
               <AlertCircle className="h-5 w-5 flex-shrink-0" />
               <div className="flex-1">
-                <p className="font-semibold">Detection Failed</p>
+                <p className="font-semibold">
+                  {t("shotDetection.detectionFailed")}
+                </p>
                 <p className="text-sm">
-                  {error?.message ||
-                    "Failed to detect shots. Please try again later."}
+                  {error?.message || t("shotDetection.failedMessage")}
                 </p>
               </div>
             </div>
@@ -218,9 +228,9 @@ function ShotDetectionPage() {
       {isPending && (
         <Card>
           <CardHeader>
-            <CardTitle>Processing Video</CardTitle>
+            <CardTitle>{t("shotDetection.processingVideo")}</CardTitle>
             <CardDescription>
-              Analyzing basketball footage to detect shots and statistics
+              {t("shotDetection.processingDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -252,26 +262,26 @@ function ShotDetectionPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <TrendingUp className="h-5 w-5" />
-                Detection Results
+                {t("shotDetection.detectionResults")}
               </CardTitle>
               <CardDescription>
-                Shot analysis statistics from the uploaded video
+                {t("shotDetection.resultsDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
                 <DetectionStats
-                  label="Total Attempts"
+                  label={t("shotDetection.totalAttempts")}
                   value={shotData.total_attempts}
                   icon={Film}
                 />
                 <DetectionStats
-                  label="Successful Makes"
+                  label={t("shotDetection.successfulMakes")}
                   value={shotData.total_makes}
                   icon={CheckCircle2}
                 />
                 <DetectionStats
-                  label="Shooting %"
+                  label={t("shotDetection.shootingPercentage")}
                   value={`${shotData.shooting_percentage}%`}
                   icon={TrendingUp}
                 />
@@ -283,10 +293,10 @@ function ShotDetectionPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Download className="h-5 w-5" />
-                Shot Events Timeline
+                {t("shotDetection.shotEventsTimeline")}
               </CardTitle>
               <CardDescription>
-                Detailed breakdown of each detected shot with frame information
+                {t("shotDetection.timelineDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -303,10 +313,11 @@ function ShotDetectionPage() {
               {shotData.shot_events.length === 0 && (
                 <div className="flex flex-col items-center justify-center py-12 text-center">
                   <AlertCircle className="mb-4 h-12 w-12 text-muted-foreground" />
-                  <p className="text-lg font-medium">No shots detected</p>
+                  <p className="text-lg font-medium">
+                    {t("shotDetection.noShotsDetected")}
+                  </p>
                   <p className="text-sm text-muted-foreground">
-                    The video analysis did not detect any shot events. Try with
-                    a different video.
+                    {t("shotDetection.noShotsMessage")}
                   </p>
                 </div>
               )}

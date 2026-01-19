@@ -7,33 +7,36 @@ import {
 } from "@repo/ui";
 import { createFileRoute } from "@tanstack/react-router";
 import { Activity, FileText, TrendingUp, Users } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/(app)/")({
   component: Dashboard,
 });
 
 function Dashboard() {
+  const { t } = useI18n();
+
   const stats = [
     {
-      title: "Total Users",
+      title: t("common.totalUsers"),
       value: "1,234",
       change: "+12%",
       icon: Users,
     },
     {
-      title: "Active Sessions",
+      title: t("common.activeSessions"),
       value: "89",
       change: "+5%",
       icon: Activity,
     },
     {
-      title: "Reports Generated",
+      title: t("common.reportsGenerated"),
       value: "456",
       change: "+23%",
       icon: FileText,
     },
     {
-      title: "Growth Rate",
+      title: t("common.growthRate"),
       value: "18.2%",
       change: "+2.1%",
       icon: TrendingUp,
@@ -43,9 +46,9 @@ function Dashboard() {
   return (
     <div className="p-6 space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Dashboard</h2>
+        <h2 className="text-2xl font-bold">{t("common.dashboard")}</h2>
         <p className="text-muted-foreground">
-          Welcome back! Here's an overview of your application.
+          {t("common.welcomeBack")} {t("common.overview")}
         </p>
       </div>
 
@@ -62,8 +65,8 @@ function Dashboard() {
             <CardContent>
               <div className="text-2xl font-bold">{stat.value}</div>
               <p className="text-xs text-muted-foreground">
-                <span className="text-green-600">{stat.change}</span> from last
-                month
+                <span className="text-green-600">{stat.change}</span>{" "}
+                {t("common.fromLastMonth")}
               </p>
             </CardContent>
           </Card>
@@ -74,8 +77,8 @@ function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-            <CardDescription>Latest events in your application</CardDescription>
+            <CardTitle>{t("common.recentActivity")}</CardTitle>
+            <CardDescription>{t("common.latestEvents")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -83,9 +86,9 @@ function Dashboard() {
                 <div key={i} className="flex items-center gap-4">
                   <div className="h-2 w-2 rounded-full bg-primary" />
                   <div className="flex-1">
-                    <p className="text-sm">User action performed</p>
+                    <p className="text-sm">{t("common.userAction")}</p>
                     <p className="text-xs text-muted-foreground">
-                      {i} hour{i > 1 ? "s" : ""} ago
+                      {t("common.hoursAgo", { count: i })}
                     </p>
                   </div>
                 </div>
@@ -96,8 +99,8 @@ function Dashboard() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
-            <CardDescription>Common tasks and operations</CardDescription>
+            <CardTitle>{t("common.quickActions")}</CardTitle>
+            <CardDescription>{t("common.commonTasks")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 gap-4">
@@ -106,28 +109,32 @@ function Dashboard() {
                 className="p-4 text-left border rounded-lg hover:bg-accent transition-colors"
               >
                 <FileText className="h-5 w-5 mb-2" />
-                <p className="text-sm font-medium">Generate Report</p>
+                <p className="text-sm font-medium">
+                  {t("common.generateReport")}
+                </p>
               </button>
               <button
                 type="button"
                 className="p-4 text-left border rounded-lg hover:bg-accent transition-colors"
               >
                 <Users className="h-5 w-5 mb-2" />
-                <p className="text-sm font-medium">Manage Users</p>
+                <p className="text-sm font-medium">{t("common.manageUsers")}</p>
               </button>
               <button
                 type="button"
                 className="p-4 text-left border rounded-lg hover:bg-accent transition-colors"
               >
                 <Activity className="h-5 w-5 mb-2" />
-                <p className="text-sm font-medium">View Analytics</p>
+                <p className="text-sm font-medium">
+                  {t("common.viewAnalytics")}
+                </p>
               </button>
               <button
                 type="button"
                 className="p-4 text-left border rounded-lg hover:bg-accent transition-colors"
               >
                 <TrendingUp className="h-5 w-5 mb-2" />
-                <p className="text-sm font-medium">Export Data</p>
+                <p className="text-sm font-medium">{t("common.exportData")}</p>
               </button>
             </div>
           </CardContent>

@@ -5,6 +5,7 @@ import type { ComponentProps } from "react";
 import { OtpVerification } from "./otp-verification";
 import { PasskeyLogin } from "./passkey-login";
 import { SocialLogin } from "./social-login";
+import { useI18n } from "@/lib/i18n";
 
 interface AuthFormContentProps {
   onSuccess?: () => void;
@@ -17,6 +18,7 @@ function AuthFormContent({
   className,
   isExternallyLoading,
 }: AuthFormContentProps) {
+  const { t } = useI18n();
   const {
     email,
     isDisabled,
@@ -35,7 +37,7 @@ function AuthFormContent({
   return (
     <div className={cn("flex flex-col gap-6", className)}>
       <div className="flex flex-col items-center text-center">
-        <h1 className="text-2xl font-bold">Welcome</h1>
+        <h1 className="text-2xl font-bold">{t("auth.welcome")}</h1>
         <p className="text-muted-foreground text-balance">
           Sign in or create your account
         </p>

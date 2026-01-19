@@ -1,10 +1,10 @@
 import { Activity, FileText, Home, Settings, Users, Video } from "lucide-react";
 
 export const sidebarItems = [
-  { icon: Home, label: "Dashboard", to: "/" },
-  { icon: Activity, label: "Analytics", to: "/analytics" },
-  { icon: Users, label: "Users", to: "/users" },
-  { icon: FileText, label: "Reports", to: "/reports" },
-  { icon: Video, label: "Shot Detection", to: "/shot-detection" },
-  { icon: Settings, label: "Settings", to: "/settings" },
+  { icon: Home, labelKey: "common.dashboard", to: "/" },
+  { icon: Activity, labelKey: "common.analytics", to: "/analytics" },
+  { icon: Users, labelKey: "common.users", to: "/users" },
+  { icon: FileText, labelKey: "common.reports", to: "/reports" },
+  { icon: Video, labelKey: "common.shotDetection", to: "/shot-detection" },
+  { icon: Settings, labelKey: "common.settings", to: "/settings" },
 ];

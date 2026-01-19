@@ -1,5 +1,6 @@
+import { useI18n } from "@/lib/i18n";
 import { Button } from "@repo/ui";
-import { Menu, Settings, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 interface HeaderProps {
   isSidebarOpen: boolean;
@@ -7,6 +8,7 @@ interface HeaderProps {
 }
 
 export function Header({ isSidebarOpen, onMenuToggle }: HeaderProps) {
+  const { t } = useI18n();
   return (
     <header className="h-14 border-b bg-background flex items-center px-4 gap-4">
       <Button
@@ -23,13 +25,7 @@ export function Header({ isSidebarOpen, onMenuToggle }: HeaderProps) {
       </Button>
 
       <div className="flex-1 flex items-center gap-4">
-        <h1 className="text-lg font-semibold">Application</h1>
-      </div>
-
-      <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon">
-          <Settings className="h-5 w-5" />
-        </Button>
+        <h1 className="text-lg font-semibold">{t("common.application")}</h1>
       </div>
     </header>
   );

@@ -7,38 +7,41 @@ import {
 } from "@repo/ui";
 import { createFileRoute } from "@tanstack/react-router";
 import { Activity, DollarSign, TrendingUp, Users } from "lucide-react";
+import { useI18n } from "@/lib/i18n";
 
 export const Route = createFileRoute("/(app)/analytics")({
   component: Analytics,
 });
 
 function Analytics() {
+  const { t } = useI18n();
+
   const metrics = [
     {
-      title: "Total Revenue",
+      title: t("common.totalRevenue"),
       value: "$45,231.89",
-      change: "+20.1% from last month",
+      change: "+20.1%",
       icon: DollarSign,
       color: "text-green-600",
     },
     {
-      title: "Active Users",
+      title: t("common.activeUsers"),
       value: "2,350",
-      change: "+180 from last month",
+      change: "+180",
       icon: Users,
       color: "text-blue-600",
     },
     {
-      title: "Conversion Rate",
+      title: t("common.conversionRate"),
       value: "3.2%",
-      change: "+0.5% from last month",
+      change: "+0.5%",
       icon: TrendingUp,
       color: "text-purple-600",
     },
     {
-      title: "Avg. Session Duration",
+      title: t("common.avgSessionDuration"),
       value: "4m 32s",
-      change: "+12s from last month",
+      change: "+12s",
       icon: Activity,
       color: "text-orange-600",
     },
@@ -47,10 +50,8 @@ function Analytics() {
   return (
     <div className="p-6 space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Analytics</h2>
-        <p className="text-muted-foreground">
-          Track your application's performance and user engagement metrics.
-        </p>
+        <h2 className="text-2xl font-bold">{t("common.analytics")}</h2>
+        <p className="text-muted-foreground">{t("common.trackPerformance")}</p>
       </div>
 
       {/* Metrics Grid */}
@@ -65,7 +66,9 @@ function Analytics() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{metric.value}</div>
-              <p className="text-xs text-muted-foreground">{metric.change}</p>
+              <p className="text-xs text-muted-foreground">
+                {metric.change} {t("common.fromLastMonth")}
+              </p>
             </CardContent>
           </Card>
         ))}
@@ -75,17 +78,15 @@ function Analytics() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>Revenue Overview</CardTitle>
-            <CardDescription>
-              Monthly revenue for the past 6 months
-            </CardDescription>
+            <CardTitle>{t("common.revenueOverview")}</CardTitle>
+            <CardDescription>{t("common.monthlyRevenue")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="h-64 flex items-center justify-center text-muted-foreground">
               {/* Placeholder for chart */}
               <div className="text-center">
                 <TrendingUp className="h-12 w-12 mx-auto mb-2" />
-                <p>Chart visualization would go here</p>
+                <p>{t("common.chartPlaceholder")}</p>
               </div>
             </div>
           </CardContent>
@@ -93,15 +94,15 @@ function Analytics() {
 
         <Card>
           <CardHeader>
-            <CardTitle>User Growth</CardTitle>
-            <CardDescription>New vs returning users over time</CardDescription>
+            <CardTitle>{t("common.userGrowth")}</CardTitle>
+            <CardDescription>{t("common.newVsReturning")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="h-64 flex items-center justify-center text-muted-foreground">
               {/* Placeholder for chart */}
               <div className="text-center">
                 <Users className="h-12 w-12 mx-auto mb-2" />
-                <p>Chart visualization would go here</p>
+                <p>{t("common.chartPlaceholder")}</p>
               </div>
             </div>
           </CardContent>
@@ -111,10 +112,8 @@ function Analytics() {
       {/* Top Pages */}
       <Card>
         <CardHeader>
-          <CardTitle>Top Pages</CardTitle>
-          <CardDescription>
-            Most visited pages in your application
-          </CardDescription>
+          <CardTitle>{t("common.topPages")}</CardTitle>
+          <CardDescription>{t("common.mostVisited")}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -130,7 +129,7 @@ function Analytics() {
                   <div className="flex justify-between mb-1">
                     <span className="text-sm font-medium">{item.page}</span>
                     <span className="text-sm text-muted-foreground">
-                      {item.views.toLocaleString()} views
+                      {item.views.toLocaleString()} {t("common.views")}
                     </span>
                   </div>
                   <div className="w-full bg-secondary rounded-full h-2">

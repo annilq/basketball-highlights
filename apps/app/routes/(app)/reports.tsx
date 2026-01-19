@@ -1,3 +1,4 @@
+import { useI18n } from "@/lib/i18n";
 import {
   Button,
   Card,
@@ -19,32 +20,33 @@ export const Route = createFileRoute("/(app)/reports")({
 });
 
 function Reports() {
+  const { t } = useI18n();
   const reports = [
     {
       id: 1,
       name: "Monthly Sales Report",
-      type: "Sales",
+      type: "sales",
       date: "2024-01-01",
       status: "Ready",
     },
     {
       id: 2,
       name: "User Activity Report",
-      type: "Analytics",
+      type: "analytics",
       date: "2024-01-15",
       status: "Ready",
     },
     {
       id: 3,
       name: "Financial Summary",
-      type: "Finance",
+      type: "finance",
       date: "2024-01-20",
       status: "Processing",
     },
     {
       id: 4,
       name: "Performance Metrics",
-      type: "Performance",
+      type: "performance",
       date: "2024-01-25",
       status: "Ready",
     },
@@ -53,18 +55,18 @@ function Reports() {
   return (
     <div className="p-6 space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Reports</h2>
-        <p className="text-muted-foreground">
-          Generate and download various reports for your data.
-        </p>
+        <h2 className="text-2xl font-bold">{t("common.reports")}</h2>
+        <p className="text-muted-foreground">{t("common.reportsManagement")}</p>
       </div>
 
       {/* Filters */}
       <Card>
         <CardHeader>
-          <CardTitle>Filters</CardTitle>
+          <CardTitle>{t("common.filter")}</CardTitle>
           <CardDescription>
-            Filter reports by type and date range
+            {t("common.filter")} {t("common.reports")} {t("common.by")}{" "}
+            {t("common.type")} {t("common.and")} {t("common.date")}{" "}
+            {t("common.range")}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -72,33 +74,41 @@ function Reports() {
             <div className="flex-1">
               <Select>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select report type" />
+                  <SelectValue
+                    placeholder={`${t("common.select")}${t("common.type")}`}
+                  />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Types</SelectItem>
-                  <SelectItem value="sales">Sales</SelectItem>
-                  <SelectItem value="analytics">Analytics</SelectItem>
-                  <SelectItem value="finance">Finance</SelectItem>
-                  <SelectItem value="performance">Performance</SelectItem>
+                  <SelectItem value="all">{`${t("common.all")}`}</SelectItem>
+                  <SelectItem value="sales">{t("common.sales")}</SelectItem>
+                  <SelectItem value="analytics">
+                    {t("common.analytics")}
+                  </SelectItem>
+                  <SelectItem value="finance">{t("common.finance")}</SelectItem>
+                  <SelectItem value="performance">
+                    {t("common.performance")}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div className="flex-1">
               <Select>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select date range" />
+                  <SelectValue
+                    placeholder={`${t("common.select")} ${t("common.date")} ${t("common.range")}`}
+                  />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="7days">Last 7 days</SelectItem>
-                  <SelectItem value="30days">Last 30 days</SelectItem>
-                  <SelectItem value="90days">Last 90 days</SelectItem>
-                  <SelectItem value="year">This year</SelectItem>
+                  <SelectItem value="7days">{`${t("common.last")} 7 ${t("common.days")}`}</SelectItem>
+                  <SelectItem value="30days">{`${t("common.last")} 30 ${t("common.days")}`}</SelectItem>
+                  <SelectItem value="90days">{`${t("common.last")} 90 ${t("common.days")}`}</SelectItem>
+                  <SelectItem value="year">{`${t("common.this")} ${t("common.year")}`}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <Button className="gap-2">
               <Filter className="h-4 w-4" />
-              Apply Filters
+              {t("common.apply")} {t("common.filters")}
             </Button>
           </div>
         </CardContent>
@@ -107,28 +117,32 @@ function Reports() {
       {/* Report Generation */}
       <Card>
         <CardHeader>
-          <CardTitle>Generate New Report</CardTitle>
-          <CardDescription>
-            Create a custom report based on your needs
-          </CardDescription>
+          <CardTitle>{t("common.generateReport")}</CardTitle>
+          <CardDescription>{t("common.createCustomReport")}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <Button variant="outline" className="h-24 flex-col gap-2">
               <FileText className="h-6 w-6" />
-              <span>Sales Report</span>
+              <span>
+                {t("common.sales")} {t("common.report")}
+              </span>
             </Button>
             <Button variant="outline" className="h-24 flex-col gap-2">
               <FileText className="h-6 w-6" />
-              <span>User Report</span>
+              <span>
+                {t("common.analytics")} {t("common.report")}
+              </span>
             </Button>
             <Button variant="outline" className="h-24 flex-col gap-2">
               <FileText className="h-6 w-6" />
-              <span>Financial Report</span>
+              <span>
+                {t("common.finance")} {t("common.report")}
+              </span>
             </Button>
             <Button variant="outline" className="h-24 flex-col gap-2">
               <FileText className="h-6 w-6" />
-              <span>Custom Report</span>
+              <span>Custom {t("common.report")}</span>
             </Button>
           </div>
         </CardContent>
@@ -137,8 +151,13 @@ function Reports() {
       {/* Recent Reports */}
       <Card>
         <CardHeader>
-          <CardTitle>Recent Reports</CardTitle>
-          <CardDescription>Your recently generated reports</CardDescription>
+          <CardTitle>
+            {t("common.recent")} {t("common.reports")}
+          </CardTitle>
+          <CardDescription>
+            {t("common.your")} {t("common.recently")} {t("common.generated")}{" "}
+            {t("common.reports")}
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -152,7 +171,7 @@ function Reports() {
                   <div>
                     <p className="font-medium">{report.name}</p>
                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                      <span>{report.type}</span>
+                      <span>{t(`common.${report.type}`)}</span>
                       <span className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
                         {report.date}

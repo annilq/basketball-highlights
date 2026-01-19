@@ -1,3 +1,5 @@
+import { useI18n } from "@/lib/i18n";
+import { useTheme } from "@/lib/theme";
 import {
   Button,
   Card,
@@ -18,12 +20,14 @@ export const Route = createFileRoute("/(app)/settings")({
 });
 
 function Settings() {
+  const { t, locale, setLocale } = useI18n();
+  const { theme, toggleTheme } = useTheme();
   return (
     <div className="p-6 space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Settings</h2>
+        <h2 className="text-2xl font-bold">{t("common.settings")}</h2>
         <p className="text-muted-foreground">
-          Manage your account settings and preferences.
+          {t("common.settingsManagement")}
         </p>
       </div>
 
@@ -33,22 +37,24 @@ function Settings() {
           <CardHeader>
             <div className="flex items-center gap-2">
               <User className="h-5 w-5" />
-              <CardTitle>Profile</CardTitle>
+              <CardTitle>{t("common.profile")}</CardTitle>
             </div>
-            <CardDescription>
-              Update your personal information and profile settings.
-            </CardDescription>
+            <CardDescription>{t("common.updateProfile")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-2">
-              <Label htmlFor="name">Name</Label>
-              <Input id="name" placeholder="Enter your name" />
+              <Label htmlFor="name">{t("common.name")}</Label>
+              <Input id="name" placeholder={t("common.enterYourName")} />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="Enter your email" />
+              <Label htmlFor="email">{t("common.email")}</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder={t("common.enterYourEmail")}
+              />
             </div>
-            <Button>Save Changes</Button>
+            <Button>{t("common.save")}</Button>
           </CardContent>
         </Card>
 
@@ -57,18 +63,20 @@ function Settings() {
           <CardHeader>
             <div className="flex items-center gap-2">
               <Bell className="h-5 w-5" />
-              <CardTitle>Notifications</CardTitle>
+              <CardTitle>{t("common.notifications")}</CardTitle>
             </div>
             <CardDescription>
-              Configure how you receive notifications.
+              {t("common.configureNotifications")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor="email-notifications">Email Notifications</Label>
+                <Label htmlFor="email-notifications">
+                  {t("common.emailNotifications")}
+                </Label>
                 <p className="text-sm text-muted-foreground">
-                  Receive notifications via email
+                  {t("common.receiveNotificationsViaEmail")}
                 </p>
               </div>
               <Switch id="email-notifications" />
@@ -76,9 +84,11 @@ function Settings() {
             <Separator />
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor="push-notifications">Push Notifications</Label>
+                <Label htmlFor="push-notifications">
+                  {t("common.pushNotifications")}
+                </Label>
                 <p className="text-sm text-muted-foreground">
-                  Receive push notifications in your browser
+                  {t("common.receivePushNotificationsInBrowser")}
                 </p>
               </div>
               <Switch id="push-notifications" />
@@ -91,19 +101,19 @@ function Settings() {
           <CardHeader>
             <div className="flex items-center gap-2">
               <Shield className="h-5 w-5" />
-              <CardTitle>Security</CardTitle>
+              <CardTitle>{t("common.security")}</CardTitle>
             </div>
             <CardDescription>
-              Manage your security preferences and authentication.
+              {t("common.manageSecurityPreferences")}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Button variant="outline">Change Password</Button>
+              <Button variant="outline">{t("common.changePassword")}</Button>
             </div>
             <div className="space-y-2">
               <Button variant="outline">
-                Enable Two-Factor Authentication
+                {t("common.enableTwoFactorAuth")}
               </Button>
             </div>
           </CardContent>
@@ -114,21 +124,48 @@ function Settings() {
           <CardHeader>
             <div className="flex items-center gap-2">
               <Palette className="h-5 w-5" />
-              <CardTitle>Appearance</CardTitle>
+              <CardTitle>{t("common.appearance")}</CardTitle>
             </div>
-            <CardDescription>
-              Customize the look and feel of the application.
-            </CardDescription>
+            <CardDescription>{t("common.customizeAppearance")}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor="dark-mode">Dark Mode</Label>
+                <Label htmlFor="dark-mode">{t("common.darkMode")}</Label>
                 <p className="text-sm text-muted-foreground">
-                  Toggle dark mode theme
+                  {t("common.toggleDarkMode")}
                 </p>
               </div>
-              <Switch id="dark-mode" />
+              <Switch
+                id="dark-mode"
+                checked={theme === "dark"}
+                onCheckedChange={toggleTheme}
+              />
+            </div>
+            <Separator />
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label htmlFor="language">{t("common.language")}</Label>
+                <p className="text-sm text-muted-foreground">
+                  {t("common.selectLanguage")}
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  variant={locale === "en" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setLocale("en")}
+                >
+                  {t("common.english")}
+                </Button>
+                <Button
+                  variant={locale === "zh" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setLocale("zh")}
+                >
+                  {t("common.chinese")}
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>
