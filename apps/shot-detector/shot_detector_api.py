@@ -1,4 +1,5 @@
 import math
+import os
 
 import cv2
 import numpy as np
@@ -150,14 +151,13 @@ class ShotDetectorAPI(ShotDetector):
         width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
         height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
-        # Calculate start and end frames
+        # Calculate start and end frames - capture duration seconds before shot_frame
         frames_per_clip = int(fps * duration)
-        start_frame = max(0, shot_frame - frames_per_clip // 2)
-        end_frame = start_frame + frames_per_clip
+        start_frame = max(0, shot_frame - frames_per_clip)
+        end_frame = shot_frame
 
         # Generate output path if not provided
         if output_path is None:
-            import os
             base_name = os.path.splitext(os.path.basename(video_path))[0]
             output_path = f"{base_name}_shot_{shot_frame}.mp4"
 
@@ -207,7 +207,6 @@ class ShotDetectorAPI(ShotDetector):
         clip_paths = []
         for i, shot_event in enumerate(made_shots):
             # Generate temporary clip path
-            import os
             base_name = os.path.splitext(os.path.basename(video_path))[0]
             temp_clip_path = f"{base_name}_shot_{shot_event['frame']}_{i}.mp4"
 
@@ -249,7 +248,6 @@ class ShotDetectorAPI(ShotDetector):
         out.release()
 
         # Clean up temporary clip files
-        import os
         for clip_path in clip_paths:
             try:
                 os.remove(clip_path)
