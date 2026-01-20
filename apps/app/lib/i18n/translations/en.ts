@@ -284,5 +284,12 @@ export const enTranslations: Translations = {
     generateClip: "Generate Clip",
     generateHighlights: "Generate Highlights",
     generatingHighlights: "Generating Highlights...",
+    dragVideoHere: "Drag and drop your video here",
+    dropVideoHere: "Drop video here",
+    orClickToUpload: "or click to upload",
+    orDragAndDrop: "or drag and drop",
+    selectVideoFile: "Select Video File",
+    videoUrlPlaceholder: "https://example.com/basketball-game.mp4",
+    orEnterUrl: "or enter a URL",
   },
 };

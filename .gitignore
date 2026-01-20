@@ -4,7 +4,7 @@
 # Compiled output
 **/dist/
 **/*.tsbuildinfo
-
+.env
 # Bun package manager
 # https://bun.sh/docs/install/lockfile
 node_modules/

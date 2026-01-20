@@ -19,7 +19,6 @@ import {
   Label,
   Separator,
   Skeleton,
-  Switch,
 } from "@repo/ui";
 import { createFileRoute } from "@tanstack/react-router";
 import {
@@ -30,7 +29,8 @@ import {
   TrendingUp,
   Upload,
 } from "lucide-react";
-import React from "react";
+import React, { useCallback } from "react";
+import { useDropzone } from "react-dropzone";
 
 export const Route = createFileRoute("/(app)/shot-detection")({
   component: ShotDetectionPage,
@@ -92,7 +92,6 @@ function ShotEvent({ event, onGenerateClip }: ShotEventProps) {
 
 function ShotDetectionPage() {
   const { t } = useI18n();
-  const [isFileUpload, setIsFileUpload] = React.useState(false);
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const [videoUrl, setVideoUrl] = React.useState<string | undefined>();
   const videoUrlRef = React.useRef<HTMLInputElement>(null);
@@ -103,14 +102,11 @@ function ShotDetectionPage() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    let currentVideoUrl: string | undefined;
-    if (isFileUpload) {
-      if (selectedFile) {
-        detectShotsMutation.mutate({ file: selectedFile });
-      }
+    if (selectedFile) {
+      detectShotsMutation.mutate({ file: selectedFile });
     } else {
       const formData = new FormData(e.currentTarget);
-      currentVideoUrl = formData.get("videoUrl") as string;
+      const currentVideoUrl = formData.get("videoUrl") as string;
       setVideoUrl(currentVideoUrl);
 
       if (currentVideoUrl) {
@@ -122,14 +118,11 @@ function ShotDetectionPage() {
   const handleGenerateHighlights = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    let currentVideoUrl: string | undefined;
-    if (isFileUpload) {
-      if (selectedFile) {
-        generateHighlightsMutation.mutate({ video: selectedFile });
-      }
+    if (selectedFile) {
+      generateHighlightsMutation.mutate({ video: selectedFile });
     } else {
       // Get the latest value from the input using ref
-      currentVideoUrl = videoUrlRef.current?.value || videoUrl;
+      const currentVideoUrl = videoUrlRef.current?.value || videoUrl;
       setVideoUrl(currentVideoUrl);
 
       if (currentVideoUrl && currentVideoUrl.trim() !== "") {
@@ -144,14 +137,12 @@ function ShotDetectionPage() {
   };
 
   const handleGenerateClip = (event: ShotEvent) => {
-    if (isFileUpload) {
-      if (selectedFile) {
-        generateShotClipMutation.mutate({
-          video: selectedFile,
-          shot_frame: event.frame,
-          duration: 3,
-        });
-      }
+    if (selectedFile) {
+      generateShotClipMutation.mutate({
+        video: selectedFile,
+        shot_frame: event.frame,
+        duration: 3,
+      });
     } else if (videoUrl) {
       generateShotClipMutation.mutate({
         videoUrl,
@@ -160,6 +151,18 @@ function ShotDetectionPage() {
       });
     }
   };
+
+  // Drag and drop functionality
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    const file = acceptedFiles[0] || null;
+    setSelectedFile(file);
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: { "video/*": [] },
+    multiple: false,
+  });
 
   const { data, status, error } = detectShotsMutation;
   const isPending = status === "pending";
@@ -185,74 +188,109 @@ function ShotDetectionPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
-            <div className="space-y-4">
-              {/* Upload method switch */}
-              <div className="flex items-center justify-between space-x-4">
-                <div>
-                  <Label htmlFor="uploadMethod">
-                    {t("shotDetection.useFileUpload")}
-                  </Label>
-                  <p className="text-sm text-muted-foreground">
-                    {t("shotDetection.toggleUploadMethod")}
-                  </p>
-                </div>
-                <Switch
-                  id="uploadMethod"
-                  checked={isFileUpload}
-                  onCheckedChange={setIsFileUpload}
-                  disabled={isPending}
-                />
-              </div>
-
-              {/* URL Input */}
-              {!isFileUpload ? (
-                <div className="space-y-2">
-                  <Label htmlFor="videoUrl">
-                    {t("shotDetection.videoUrl")}
-                  </Label>
-                  <Input
-                    id="videoUrl"
-                    name="videoUrl"
-                    type="url"
-                    placeholder="https://example.com/basketball-game.mp4"
+            <div className="space-y-6">
+              {/* Video File Upload */}
+              <div className="space-y-2">
+                <Label htmlFor="videoFile">
+                  {t("shotDetection.videoFile")}
+                </Label>
+                <div
+                  {...getRootProps()}
+                  className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer ${
+                    isDragActive
+                      ? "border-primary bg-primary/5"
+                      : "border-input hover:border-primary"
+                  }`}
+                >
+                  <input
+                    {...getInputProps()}
+                    id="videoFile"
+                    name="videoFile"
+                    accept="video/*"
                     disabled={isPending}
-                    required
-                    onChange={(e) => setVideoUrl(e.target.value)}
-                    ref={videoUrlRef}
+                    onChange={handleFileChange}
                   />
-                </div>
-              ) : (
-                /* File Upload */
-                <div className="space-y-2">
-                  <Label htmlFor="videoFile">
-                    {t("shotDetection.videoFile")}
-                  </Label>
-                  <div className="flex space-x-2">
-                    <Input
-                      id="videoFile"
-                      name="videoFile"
-                      type="file"
-                      accept="video/*"
-                      onChange={handleFileChange}
-                      disabled={isPending}
-                      required
-                      className="flex-1"
-                    />
-                  </div>
-                  {selectedFile && (
-                    <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
-                      <Upload className="h-4 w-4" />
-                      <span>
-                        {selectedFile.name} (
-                        {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB)
-                      </span>
+                  {isDragActive ? (
+                    <div className="space-y-4">
+                      <Upload className="mx-auto h-12 w-12 text-primary" />
+                      <p className="text-lg font-medium">
+                        {t("shotDetection.dropVideoHere")}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {t("shotDetection.orDragAndDrop")}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      <Upload className="mx-auto h-12 w-12 text-muted-foreground" />
+                      <p className="text-lg font-medium">
+                        {t("shotDetection.dragVideoHere")}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {t("shotDetection.orClickToUpload")}
+                      </p>
+                      <Button
+                        type="button"
+                        disabled={isPending}
+                        className="mt-2"
+                      >
+                        <Upload className="mr-2 h-4 w-4" />
+                        {t("shotDetection.selectVideoFile")}
+                      </Button>
                     </div>
                   )}
                 </div>
-              )}
+                {selectedFile && (
+                  <div className="mt-4 flex items-center justify-between p-3 bg-muted rounded-lg">
+                    <div className="flex items-center gap-3">
+                      <Film className="h-6 w-6 text-primary" />
+                      <div>
+                        <p className="font-medium">{selectedFile.name}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB
+                        </p>
+                      </div>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => setSelectedFile(null)}
+                      disabled={isPending}
+                    >
+                      {t("common.remove")}
+                    </Button>
+                  </div>
+                )}
+              </div>
+
+              {/* URL Input */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="videoUrl">
+                    {t("shotDetection.videoUrl")}
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    {t("shotDetection.orEnterUrl")}
+                  </p>
+                </div>
+                <Input
+                  id="videoUrl"
+                  name="videoUrl"
+                  type="url"
+                  placeholder={t("shotDetection.videoUrlPlaceholder")}
+                  disabled={isPending || !!selectedFile}
+                  onChange={(e) => setVideoUrl(e.target.value)}
+                  ref={videoUrlRef}
+                />
+              </div>
 
               <div className="flex space-x-2">
-                <Button type="submit" disabled={isPending} className="flex-1">
+                <Button
+                  type="submit"
+                  disabled={isPending || (!selectedFile && !videoUrl)}
+                  className="flex-1"
+                >
                   {isPending ? (
                     <>
                       <TrendingUp className="mr-2 h-4 w-4 animate-spin" />
@@ -267,7 +305,11 @@ function ShotDetectionPage() {
                 </Button>
                 <Button
                   type="button"
-                  disabled={isPending || generateHighlightsMutation.isPending}
+                  disabled={
+                    isPending ||
+                    generateHighlightsMutation.isPending ||
+                    (!selectedFile && !videoUrl)
+                  }
                   className="flex-1"
                   onClick={handleGenerateHighlights}
                 >

@@ -267,5 +267,12 @@ export const zhTranslations: Translations = {
     generateClip: "生成片段",
     generateHighlights: "生成集锦",
     generatingHighlights: "正在生成集锦...",
+    dragVideoHere: "将视频拖放到此处",
+    dropVideoHere: "在此处放下视频",
+    orClickToUpload: "或点击上传",
+    orDragAndDrop: "或拖放",
+    selectVideoFile: "选择视频文件",
+    videoUrlPlaceholder: "https://example.com/basketball-game.mp4",
+    orEnterUrl: "或输入URL",
   },
 };
