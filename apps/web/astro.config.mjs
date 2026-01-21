@@ -16,4 +16,11 @@ export default defineConfig({
       postcss: "./postcss.config.js",
     },
   },
+  i18n: {
+    locales: ["en", "zh"],
+    defaultLocale: "en",
+    routing: {
+      prefixDefaultLocale: false,
+    },
+  },
 });
