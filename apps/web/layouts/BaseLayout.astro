@@ -1,5 +1,6 @@
 ---
 import '@/styles/globals.css';
+import { getRelativeLocaleUrl } from 'astro:i18n';
 
 export interface Props {
   title?: string;
@@ -12,10 +13,82 @@ const {
   description = 'Transform full game footage into engaging basketball highlight reels in minutes with AI-powered automation. Perfect for content creators.',
   image = '/og-image.png'
 } = Astro.props;
+
+const currentLocale = Astro.url.pathname.startsWith('/zh') ? 'zh' : 'en';
+const otherLocale = currentLocale === 'en' ? 'zh' : 'en';
+const otherLocaleName = otherLocale === 'en' ? 'EN' : '中文';
+const currentPath = Astro.url.pathname.replace(/^\/(zh\/)?/, '/');
+const switchUrl = getRelativeLocaleUrl(otherLocale, currentPath.slice(1));
+
+// 生成带语言前缀的链接
+const getLocalizedUrl = (path: string) => {
+  return currentLocale === 'en' ? path : `/zh${path}`;
+};
+
+// 导航项翻译
+const navItems = {
+  en: [
+    { name: 'Home', path: '/' },
+    { name: 'Features', path: '/features' },
+    { name: 'Pricing', path: '/pricing' },
+    { name: 'About', path: '/about' }
+  ],
+  zh: [
+    { name: '首页', path: '/' },
+    { name: '功能', path: '/features' },
+    { name: '定价', path: '/pricing' },
+    { name: '关于我们', path: '/about' }
+  ]
+};
+
+// 页脚链接翻译
+const footerLinks = {
+  en: {
+    product: 'Product',
+    support: 'Support',
+    legal: 'Legal',
+    helpCenter: 'Help Center',
+    contact: 'Contact',
+    faq: 'FAQ',
+    privacyPolicy: 'Privacy Policy',
+    termsOfService: 'Terms of Service'
+  },
+  zh: {
+    product: '产品',
+    support: '支持',
+    legal: '法律',
+    helpCenter: '帮助中心',
+    contact: '联系我们',
+    faq: '常见问题',
+    privacyPolicy: '隐私政策',
+    termsOfService: '服务条款'
+  }
+};
+
+// 当前语言的导航和页脚数据
+const currentNavItems = navItems[currentLocale];
+const currentFooterLinks = footerLinks[currentLocale];
+
+// 页脚标题和描述
+const footerContent = {
+  en: {
+    title: 'Basketball Highlights AI',
+    description: 'AI-powered video editing for basketball content creators. Transform games into highlights in minutes.'
+  },
+  zh: {
+    title: '篮球高光 AI',
+    description: '专为篮球内容创作者设计的 AI 视频编辑工具。在几分钟内将比赛转化为高光视频。'
+  }
+};
+
+const currentFooterContent = footerContent[currentLocale];
+
+// 开始免费按钮文本
+const startFreeText = currentLocale === 'en' ? 'Start Free' : '免费开始';
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={currentLocale}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -48,30 +121,33 @@ const {
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
           <div class="flex h-16 items-center justify-between">
             <div class="flex items-center space-x-4">
-              <a href="/" class="text-xl font-bold text-primary">
+              <a href={getLocalizedUrl('/')} class="text-xl font-bold text-primary">
                 🏀 Highlights AI
               </a>
             </div>
             <nav class="hidden md:flex items-center space-x-6">
-              <a href="/" class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                Home
-              </a>
-              <a href="/features" class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                Features
-              </a>
-              <a href="/pricing" class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                Pricing
-              </a>
-              <a href="/about" class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                About
-              </a>
+              {currentNavItems.map((item) => (
+                <a 
+                  key={item.path}
+                  href={getLocalizedUrl(item.path)} 
+                  class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {item.name}
+                </a>
+              ))}
             </nav>
             <div class="flex items-center space-x-2">
               <a
-                href="/signup"
+                href={switchUrl}
+                class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-background text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground h-8 px-3 border border-input"
+              >
+                {otherLocaleName}
+              </a>
+              <a
+                href={getLocalizedUrl('/signup')}
                 class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-8 px-3"
               >
-                Start Free
+                {startFreeText}
               </a>
             </div>
           </div>
@@ -88,63 +164,62 @@ const {
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div class="space-y-3">
-              <h3 class="font-semibold">Basketball Highlights AI</h3>
+              <h3 class="font-semibold">{currentFooterContent.title}</h3>
               <p class="text-sm text-muted-foreground">
-                AI-powered video editing for basketball content creators.
-                Transform games into highlights in minutes.
+                {currentFooterContent.description}
               </p>
             </div>
             <div class="space-y-3">
-              <h4 class="font-medium">Product</h4>
+              <h4 class="font-medium">{currentFooterLinks.product}</h4>
               <ul class="space-y-2 text-sm text-muted-foreground">
                 <li>
-                  <a href="/features" class="hover:text-foreground transition-colors">
-                    Features
+                  <a href={getLocalizedUrl('/features')} class="hover:text-foreground transition-colors">
+                    {currentNavItems[1].name}
                   </a>
                 </li>
                 <li>
-                  <a href="/pricing" class="hover:text-foreground transition-colors">
-                    Pricing
+                  <a href={getLocalizedUrl('/pricing')} class="hover:text-foreground transition-colors">
+                    {currentNavItems[2].name}
                   </a>
                 </li>
                 <li>
-                  <a href="/about" class="hover:text-foreground transition-colors">
-                    About
+                  <a href={getLocalizedUrl('/about')} class="hover:text-foreground transition-colors">
+                    {currentNavItems[3].name}
                   </a>
                 </li>
               </ul>
             </div>
             <div class="space-y-3">
-              <h4 class="font-medium">Support</h4>
+              <h4 class="font-medium">{currentFooterLinks.support}</h4>
               <ul class="space-y-2 text-sm text-muted-foreground">
                 <li>
-                  <a href="/help" class="hover:text-foreground transition-colors">
-                    Help Center
+                  <a href={getLocalizedUrl('/help')} class="hover:text-foreground transition-colors">
+                    {currentFooterLinks.helpCenter}
                   </a>
                 </li>
                 <li>
-                  <a href="/contact" class="hover:text-foreground transition-colors">
-                    Contact
+                  <a href={getLocalizedUrl('/contact')} class="hover:text-foreground transition-colors">
+                    {currentFooterLinks.contact}
                   </a>
                 </li>
                 <li>
-                  <a href="/faq" class="hover:text-foreground transition-colors">
-                    FAQ
+                  <a href={getLocalizedUrl('/faq')} class="hover:text-foreground transition-colors">
+                    {currentFooterLinks.faq}
                   </a>
                 </li>
               </ul>
             </div>
             <div class="space-y-3">
-              <h4 class="font-medium">Legal</h4>
+              <h4 class="font-medium">{currentFooterLinks.legal}</h4>
               <ul class="space-y-2 text-sm text-muted-foreground">
                 <li>
-                  <a href="/privacy" class="hover:text-foreground transition-colors">
-                    Privacy Policy
+                  <a href={getLocalizedUrl('/privacy')} class="hover:text-foreground transition-colors">
+                    {currentFooterLinks.privacyPolicy}
                   </a>
                 </li>
                 <li>
-                  <a href="/terms" class="hover:text-foreground transition-colors">
-                    Terms of Service
+                  <a href={getLocalizedUrl('/terms')} class="hover:text-foreground transition-colors">
+                    {currentFooterLinks.termsOfService}
                   </a>
                 </li>
               </ul>

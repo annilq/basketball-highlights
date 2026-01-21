@@ -1,0 +1,252 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Separator } from '@repo/ui';
+
+const title = "关于我们 - 篮球高光 AI";
+const description = "了解篮球高光 AI 如何彻底改变内容创作者制作篮球高光视频的方式。";
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <!-- Hero Section -->
+    <div class="text-center mb-16">
+      <h1 class="text-4xl font-bold tracking-tight mb-6">
+        关于篮球高光 AI
+      </h1>
+      <p class="text-xl text-muted-foreground max-w-3xl mx-auto">
+        我们的使命是帮助内容创作者在更短的时间内制作出精彩的篮球
+        高光视频，让您能够专注于增长受众。
+      </p>
+    </div>
+
+    <!-- Mission Section -->
+    <section class="mb-20">
+      <Card client:visible>
+        <CardHeader>
+          <CardTitle className="text-2xl">我们的使命</CardTitle>
+          <CardDescription>
+            为创作者提供基于 AI 的视频编辑工具
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p class="text-muted-foreground">
+            篮球高光 AI 的建立是为了解决一个简单的问题：从完整的比赛录像中创建
+            高光视频需要太长时间。内容创作者花费数小时手动观看、剪辑和编辑篮球比赛，
+            才能制作出观众喜爱的内容。
+          </p>
+          <p class="text-muted-foreground">
+            我们相信技术应该承担繁重的工作。我们的 AI
+            自动识别最激动人心的时刻，创建流畅的
+            转场，并以适合您所选平台的完美格式导出。以前需要数小时的工作，现在只需几分钟。
+          </p>
+          <p class="text-muted-foreground">
+            我们的使命是帮助世界各地的篮球内容创作者制作
+            更多、更好、更快的内容。无论您是在建立 YouTube 频道、
+            主导 TikTok，还是专业报道比赛，我们都在这里
+            为您的工作流程提供助力。
+          </p>
+        </CardContent>
+      </Card>
+    </section>
+
+    <!-- Key Features -->
+    <section class="mb-20">
+      <h2 class="text-3xl font-bold tracking-tight mb-8 text-center">
+        我们的优势
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <Card client:visible>
+          <CardHeader>
+            <CardTitle>🎯 专为篮球打造</CardTitle>
+            <CardDescription>
+              AI 专门针对篮球录像进行训练
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p class="text-sm text-muted-foreground">
+              我们的 AI 理解篮球比赛。它知道常规
+              上篮和雷霆扣篮的区别。它能识别压哨球、观众
+              反应和比赛势头的变化。您将获得真正捕捉到
+              篮球比赛激动人心时刻的高光视频。
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card client:visible>
+          <CardHeader>
+            <CardTitle>⚡ 闪电般快速</CardTitle>
+            <CardDescription>
+              完整比赛到高光视频只需不到 5 分钟
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p class="text-sm text-muted-foreground">
+              基于云的处理意味着无需等待。上传您的比赛，喝杯咖啡，
+              回来就能看到完整的高光视频。我们的基础设施
+              经过优化，速度飞快，所以您可以在比赛
+              仍然记忆犹新的时候发布内容。
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card client:visible>
+          <CardHeader>
+            <CardTitle>🔧 以创作者为中心</CardTitle>
+            <CardDescription>
+              专为内容创作者设计的工具
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p class="text-sm text-muted-foreground">
+              我们为创作者而不是工程师构建了这个工具。我们的界面直观
+              且精简。批量处理多场比赛，自定义您的品牌，
+              一键导出到任何平台。它就是这么简单易用。
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card client:visible>
+          <CardHeader>
+            <CardTitle>🎬 专业品质</CardTitle>
+            <CardDescription>
+              看起来像专业编辑的高质量高光视频
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p class="text-sm text-muted-foreground">
+              智能转场、流畅的镜头运动、自动音频均衡 - 所有这些都自动完成。
+              您的观众会认为您花了数小时编辑，但他们永远不会知道
+              您只花了几分钟。
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    </section>
+
+    <!-- Problem & Solution -->
+    <section class="mb-20">
+      <h2 class="text-3xl font-bold tracking-tight mb-8 text-center">
+        我们解决的问题
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <Card client:visible className="bg-muted/20">
+          <CardHeader>
+            <CardTitle>❌ 之前：手动编辑</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul class="space-y-2 text-sm text-muted-foreground">
+              <li>• 观看整个 48+ 分钟的比赛</li>
+              <li>• 手动识别激动人心的比赛片段</li>
+              <li>• 剪辑和安排每个片段</li>
+              <li>• 手动添加转场和效果</li>
+              <li>• 调整音频级别</li>
+              <li>• 为不同平台格式化</li>
+              <li>• <strong class="text-foreground">3-5+ 小时的工作</strong></li>
+            </ul>
+          </CardContent>
+        </Card>
+
+        <Card client:visible className="bg-primary/10 border-primary">
+          <CardHeader>
+            <CardTitle>✅ 现在：AI 驱动</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul class="space-y-2 text-sm text-muted-foreground">
+              <li>• 上传您的比赛文件</li>
+              <li>• AI 自动检测所有高光时刻</li>
+              <li>• 预览和微调选择</li>
+              <li>• 一次性添加您的品牌</li>
+              <li>• 为您的平台点击导出</li>
+              <li>• 专业品质的输出</li>
+              <li>• <strong class="text-primary">总计不到 5 分钟</strong></li>
+            </ul>
+          </CardContent>
+        </Card>
+      </div>
+    </section>
+
+    <!-- Technology -->
+    <section class="mb-20">
+      <h2 class="text-3xl font-bold tracking-tight mb-8 text-center">
+        我们的技术
+      </h2>
+
+      <Card client:visible>
+        <CardContent className="pt-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <h3 class="font-semibold mb-4">AI 与机器学习</h3>
+              <ul class="space-y-2 text-sm text-muted-foreground">
+                <li>
+                  <strong>计算机视觉：</strong>先进的物体检测，用于
+                  球员、球和比赛动态
+                </li>
+                <li>
+                  <strong>动作识别：</strong>识别扣篮、三分球、
+                  盖帽、抢断等
+                </li>
+                <li>
+                  <strong>音频分析：</strong>使用观众噪音和解说
+                  兴奋度来寻找关键时刻
+                </li>
+                <li>
+                  <strong>智能编辑：</strong>创建流畅的转场和
+                  专业外观的序列
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 class="font-semibold mb-4">平台与基础设施</h3>
+              <ul class="space-y-2 text-sm text-muted-foreground">
+                <li>
+                  <strong>云处理：</strong>快速、可扩展的基础设施，用于
+                  快速视频处理
+                </li>
+                <li>
+                  <strong>现代 Web 技术：</strong>使用最新的 Web
+                  框架构建，以获得最佳性能
+                </li>
+                <li>
+                  <strong>安全存储：</strong>您的录像在云中加密并安全存储
+                </li>
+                <li>
+                  <strong>多格式导出：</strong>针对 YouTube、
+                  TikTok、Instagram、Twitter 等进行优化
+                </li>
+              </ul>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </section>
+
+    <Separator className="my-12" client:visible />
+
+    <!-- CTA Section -->
+    <section class="text-center">
+      <h2 class="text-3xl font-bold tracking-tight mb-4">
+        准备好改变您的工作流程了吗？
+      </h2>
+      <p class="text-muted-foreground text-lg mb-8 max-w-2xl mx-auto">
+        加入成千上万的篮球内容创作者，他们每周都在使用篮球高光 AI
+        节省数小时的编辑时间。
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <Button size="lg" asChild client:visible>
+          <a href="/zh/pricing">
+            开始免费试用
+          </a>
+        </Button>
+        <Button variant="outline" size="lg" asChild client:visible>
+          <a href="/zh/features">
+            探索功能
+          </a>
+        </Button>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

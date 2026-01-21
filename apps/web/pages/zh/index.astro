@@ -1,0 +1,236 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui';
+
+const features = [
+  {
+    title: "🏀 AI 驱动的高光视频",
+    description: "自动检测并提取精彩的比赛片段",
+    content: "将数小时的篮球录像转化为引人入胜的高光视频，使用先进的 AI 识别扣篮、三分球和改变比赛的时刻。"
+  },
+  {
+    title: "⚡ 闪电般快速",
+    description: "在几分钟内处理完整的比赛录像，而不是几小时",
+    content: "我们基于云的 AI 快速处理您的视频，让您在兴奋感还新鲜的时候就能将高光视频呈现给观众。"
+  },
+  {
+    title: "📱 社交媒体就绪",
+    description: "针对 TikTok、YouTube、Instagram 等平台优化导出",
+    content: "一键导出，格式和宽高比完美适配所有主要社交平台。无需手动调整大小或重新格式化。"
+  },
+  {
+    title: "🎬 专业品质",
+    description: "清晰的高光视频，看起来像专业编辑的内容",
+    content: "智能转场、流畅的镜头运动和自动音频均衡，使每个高光视频看起来都像是专业制作的。"
+  },
+  {
+    title: "🎨 自定义品牌",
+    description: "添加您的徽标、颜色和片头/片尾序列",
+    content: "通过可自定义的水印、片头和片尾保持您的品牌形象。您的高光视频，您的风格。"
+  },
+  {
+    title: "🔄 批量处理",
+    description: "一次处理多场比赛，节省更多时间",
+    content: "上传多场比赛，让我们的 AI 自动为每场比赛生成高光视频。非常适合全赛季内容创作。"
+  }
+];
+
+const technologies = [
+  "AI 视频处理", "云基础设施", "智能检测",
+  "自动编辑", "多格式导出", "社交优化"
+];
+---
+
+<BaseLayout>
+  <!-- Hero Section with Video Comparison -->
+  <section class="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background to-muted/20">
+    <div class="container mx-auto text-center">
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+        将篮球比赛转化为 viral 高光视频
+      </h1>
+      <p class="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
+        基于 AI 的视频编辑，在几分钟内将完整的比赛录像转化为引人入胜的
+        高光视频。非常适合 YouTuber、TikTok 创作者和体育媒体。
+      </p>
+
+      <!-- Video Comparison Section -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl mx-auto mb-12">
+        <!-- Original Footage -->
+        <div class="space-y-3">
+          <h3 class="text-lg font-semibold flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-muted-foreground"></span>
+            原始比赛录像
+          </h3>
+          <div class="relative rounded-lg overflow-hidden bg-muted aspect-video flex items-center justify-center border-2 border-dashed border-muted-foreground/30">
+            <div class="text-center p-8">
+              <p class="text-4xl mb-2">🏀</p>
+              <p class="text-muted-foreground font-medium">完整比赛视频</p>
+              <p class="text-sm text-muted-foreground mt-2">48+ 分钟的录像</p>
+            </div>
+            <div class="absolute bottom-4 left-4 right-4 bg-black/50 backdrop-blur-sm rounded px-3 py-2">
+              <p class="text-white text-sm">带有完整比赛解说的原始录像</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI Highlights -->
+        <div class="space-y-3">
+          <h3 class="text-lg font-semibold flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-primary"></span>
+            AI 生成的高光视频
+          </h3>
+          <div class="relative rounded-lg overflow-hidden bg-muted aspect-video flex items-center justify-center border-2 border-primary">
+            <div class="text-center p-8">
+              <p class="text-4xl mb-2">⚡</p>
+              <p class="text-primary font-medium">高光视频</p>
+              <p class="text-sm text-muted-foreground mt-2">3 分钟的精彩内容</p>
+            </div>
+            <div class="absolute bottom-4 left-4 right-4 bg-primary/90 backdrop-blur-sm rounded px-3 py-2">
+              <p class="text-white text-sm">AI 自动选择最佳比赛片段</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Value Proposition -->
+      <div class="max-w-2xl mx-auto mb-8 p-6 bg-primary/10 rounded-lg border border-primary/20">
+        <p class="text-lg font-semibold text-primary mb-2">
+          节省数小时的编辑时间
+        </p>
+        <p class="text-muted-foreground">
+          您手动编辑需要 3+ 小时的工作，我们的 AI 不到 5 分钟就能完成。
+          比以往更快地创建更多内容。
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <Button size="lg" asChild client:visible>
+          <a href="/zh/pricing">
+            开始免费试用
+          </a>
+        </Button>
+        <Button variant="outline" size="lg" asChild client:visible>
+          <a href="/zh/features">
+            了解工作原理
+          </a>
+        </Button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-20 px-4 sm:px-6 lg:px-8">
+    <div class="container mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl font-bold tracking-tight mb-4">
+          创建 viral 篮球内容所需的一切
+        </h2>
+        <p class="text-muted-foreground text-lg max-w-2xl mx-auto">
+          专为篮球内容创作者设计的强大 AI 工具。
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {features.map((feature) => (
+          <Card client:visible>
+            <CardHeader>
+              <CardTitle>{feature.title}</CardTitle>
+              <CardDescription>{feature.description}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p class="text-sm text-muted-foreground">{feature.content}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Creator Types Section -->
+  <section class="py-20 px-4 sm:px-6 lg:px-8 bg-muted/20">
+    <div class="container mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl font-bold tracking-tight mb-4">
+          为像您这样的内容创作者打造
+        </h2>
+        <p class="text-muted-foreground text-lg max-w-2xl mx-auto">
+          无论您是 YouTuber、TikTok 创作者还是体育媒体，我们都能帮助您
+          在更短的时间内创建更多篮球内容。
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <Card client:visible>
+          <CardHeader>
+            <CardTitle>📺 YouTube 创作者</CardTitle>
+            <CardDescription>创建每日高光频道</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ul class="space-y-2 text-sm text-muted-foreground">
+              <li>• 将完整比赛处理成适合 YouTube 的高光视频</li>
+              <li>• 生成一致的每日内容</li>
+              <li>• 自动添加您的品牌</li>
+              <li>• 以 16:9 或 9:16 格式导出</li>
+            </ul>
+          </CardContent>
+        </Card>
+
+        <Card client:visible>
+          <CardHeader>
+            <CardTitle>🎵 TikTok 创作者</CardTitle>
+            <CardDescription>用短视频高光内容走红</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ul class="space-y-2 text-sm text-muted-foreground">
+              <li>• 自动提取有 viral 潜力的片段</li>
+              <li>• 完美的 9:16 垂直格式</li>
+              <li>• 准备好流行音频</li>
+              <li>• 批量处理多场比赛</li>
+            </ul>
+          </CardContent>
+        </Card>
+
+        <Card client:visible>
+          <CardHeader>
+            <CardTitle>📰 体育媒体</CardTitle>
+            <CardDescription>高效报道比赛</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ul class="space-y-2 text-sm text-muted-foreground">
+              <li>• 快速周转比赛报道</li>
+              <li>• 专业品质的输出</li>
+              <li>• 多支球队的批量处理</li>
+              <li>• 一致的品牌展示</li>
+            </ul>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20 px-4 sm:px-6 lg:px-8">
+    <div class="container mx-auto text-center">
+      <h2 class="text-3xl font-bold tracking-tight mb-4">
+        准备好创建精彩的篮球高光视频了吗？
+      </h2>
+      <p class="text-muted-foreground text-lg mb-8 max-w-2xl mx-auto">
+        加入成千上万的内容创作者，他们正在使用 AI 驱动的高光视频生成
+        节省数小时的编辑时间。
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <Button size="lg" asChild client:visible>
+          <a href="/zh/pricing">
+            开始免费试用
+          </a>
+        </Button>
+        <Button variant="outline" size="lg" asChild client:visible>
+          <a href="/zh/features">
+            探索所有功能
+          </a>
+        </Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

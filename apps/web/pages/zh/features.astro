@@ -1,0 +1,325 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui';
+
+const title = "功能 - 篮球高光 AI";
+const description = "发现强大的 AI 功能，帮助您在几分钟内创建引人入胜的篮球高光视频，而不是几小时。";
+
+const featureCategories = [
+  {
+    title: "AI 与自动化",
+    icon: "🤖",
+    features: [
+      {
+        title: "智能比赛片段检测",
+        description: "AI 自动识别扣篮、三分球、盖帽和精彩时刻"
+      },
+      {
+        title: "自动高光选择",
+        description: "智能算法从完整比赛录像中挑选最引人入胜的比赛片段"
+      },
+      {
+        title: "观众噪音分析",
+        description: "使用音频线索寻找观众喜爱的时刻和压哨球"
+      },
+      {
+        title: "球员和球队识别",
+        description: "识别关键球员和球队，用于自动标记和组织"
+      }
+    ]
+  },
+  {
+    title: "导出选项",
+    icon: "📤",
+    features: [
+      {
+        title: "社交平台优化",
+        description: "一键导出到 YouTube、TikTok、Instagram、Twitter 等平台"
+      },
+      {
+        title: "多种格式",
+        description: "以 MP4、MOV 和其他流行格式导出，可自定义质量"
+      },
+      {
+        title: "宽高比支持",
+        description: "自动调整为 16:9、9:16 和 1:1 宽高比"
+      },
+      {
+        title: "自定义品牌",
+        description: "为每个导出添加您的徽标、片头/片尾序列和水印"
+      }
+    ]
+  },
+  {
+    title: "用户体验",
+    icon: "⚡",
+    features: [
+      {
+        title: "快速处理",
+        description: "基于云的 AI 在不到 5 分钟内处理完整比赛"
+      },
+      {
+        title: "直观界面",
+        description: "简单、清晰的界面，适合所有技能水平的创作者"
+      },
+      {
+        title: "实时预览",
+        description: "在导出前预览高光视频并进行实时调整"
+      },
+      {
+        title: "云存储",
+        description: "所有项目安全保存在云中，可从任何地方访问"
+      }
+    ]
+  },
+  {
+    title: "创作者工具",
+    icon: "🛠️",
+    features: [
+      {
+        title: "批量处理",
+        description: "上传多场比赛并一次性为所有比赛生成高光视频"
+      },
+      {
+        title: "模板库",
+        description: "现成的片头/片尾模板，快速获得专业效果"
+      },
+      {
+        title: "高级编辑",
+        description: "使用手动覆盖功能微调 AI 选择"
+      },
+      {
+        title: "协作",
+        description: "与团队成员共享项目，实时协作"
+      }
+    ]
+  },
+  {
+    title: "质量与性能",
+    icon: "✨",
+    features: [
+      {
+        title: "4K 分辨率支持",
+        description: "以高达 4K 的质量处理和导出，适合专业输出"
+      },
+      {
+        title: "流畅转场",
+        description: "AI 在片段之间创建专业外观的转场"
+      },
+      {
+        title: "音频均衡",
+        description: "自动音量标准化，实现一致的音频质量"
+      },
+      {
+        title: "颜色校正",
+        description: "智能颜色增强，获得生动、专业的录像效果"
+      }
+    ]
+  },
+  {
+    title: "分析与洞察",
+    icon: "📊",
+    features: [
+      {
+        title: "参与度指标",
+        description: "跟踪哪些高光视频在您的平台上表现最佳"
+      },
+      {
+        title: "处理历史",
+        description: "所有处理过的比赛和高光视频的完整日志"
+      },
+      {
+        title: "存储分析",
+        description: "监控您的云存储使用情况并根据需要进行优化"
+      },
+      {
+        title: "性能报告",
+        description: "每周洞察您的内容创作效率"
+      }
+    ]
+  }
+];
+
+const useCases = [
+  {
+    title: "YouTube 内容创作者",
+    description: "使用一致、专业的内容构建每日高光频道",
+    benefits: [
+      "将完整比赛处理成适合 YouTube 的 16:9 高光视频",
+      "添加自定义品牌和片头，保持频道一致性",
+      "从一场比赛生成多个高光视频（前 5 个最佳片段、特定球员等）",
+      "安排导出，实现自动化发布工作流程"
+    ]
+  },
+  {
+    title: "TikTok 和 Reels 创作者",
+    description: "大规模创建 viral 短视频篮球内容",
+    benefits: [
+      "自动提取适合 viral 的片段，完美的 9:16 垂直格式",
+      "为您的高光视频提供流行音频建议",
+      "每天快速批量处理多场比赛",
+      "优化的字幕和效果，最大化参与度"
+    ]
+  },
+  {
+    title: "体育媒体和新闻",
+    description: "快速、高效地报道比赛，提供专业品质的高光视频",
+    benefits: [
+      "在不到 10 分钟内完成完整比赛报道",
+      "多支球队的批量处理，全面覆盖",
+      "专业的新闻风格呈现模板",
+      "所有球队报道的一致品牌"
+    ]
+  }
+];
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <!-- Hero Section -->
+    <div class="text-center mb-16">
+      <h1 class="text-4xl font-bold tracking-tight mb-6">
+        篮球内容创作者的强大功能
+      </h1>
+      <p class="text-xl text-muted-foreground max-w-3xl mx-auto">
+        您需要的一切，将完整的比赛录像转化为引人入胜的高光视频，
+        借助 AI 驱动的自动化和专业品质的输出。
+      </p>
+    </div>
+
+    <!-- Feature Categories -->
+    {featureCategories.map((category) => (
+      <section class="mb-20">
+        <div class="flex items-center mb-8">
+          <span class="text-4xl mr-4">{category.icon}</span>
+          <h2 class="text-3xl font-bold tracking-tight">{category.title}</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {category.features.map((feature) => (
+            <Card client:visible>
+              <CardHeader>
+                <CardTitle className="text-lg">{feature.title}</CardTitle>
+                <CardDescription>{feature.description}</CardDescription>
+              </CardHeader>
+            </Card>
+          ))}
+        </div>
+      </section>
+    ))}
+
+    <!-- Use Cases Section -->
+    <section class="mb-20 bg-muted/20 rounded-lg p-12">
+      <h2 class="text-3xl font-bold tracking-tight mb-4 text-center">
+        为每种类型的内容创作者打造
+      </h2>
+      <p class="text-muted-foreground text-lg mb-12 text-center max-w-2xl mx-auto">
+        无论您是在建立 YouTube 频道、主导 TikTok，还是为媒体报道比赛，
+        我们的 AI 都能适应您的工作流程。
+      </p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {useCases.map((useCase) => (
+          <Card client:visible>
+            <CardHeader>
+              <CardTitle className="text-xl">{useCase.title}</CardTitle>
+              <CardDescription>{useCase.description}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ul class="space-y-3">
+                {useCase.benefits.map((benefit) => (
+                  <li class="flex items-start">
+                    <svg
+                      class="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    <span class="text-sm text-muted-foreground">{benefit}</span>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </section>
+
+    <!-- Technical Specs -->
+    <section class="mb-20">
+      <h2 class="text-3xl font-bold tracking-tight mb-8 text-center">
+        技术质量与性能
+      </h2>
+
+      <Card client:visible>
+        <CardContent className="pt-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="text-center">
+              <div class="text-4xl font-bold text-primary mb-2">4K</div>
+              <div class="text-sm text-muted-foreground">最大分辨率</div>
+              <p class="text-xs text-muted-foreground mt-2">超高清质量，适合专业输出</p>
+            </div>
+            <div class="text-center">
+              <div class="text-4xl font-bold text-primary mb-2">5 分钟</div>
+              <div class="text-sm text-muted-foreground">平均处理时间</div>
+              <p class="text-xs text-muted-foreground mt-2">完整比赛到高光视频只需不到 5 分钟</p>
+            </div>
+            <div class="text-center">
+              <div class="text-4xl font-bold text-primary mb-2">99.9%</div>
+              <div class="text-sm text-muted-foreground">正常运行时间保证</div>
+              <p class="text-xs text-muted-foreground mt-2">可靠的云基础设施</p>
+            </div>
+            <div class="text-center">
+              <div class="text-4xl font-bold text-primary mb-2">MP4, MOV</div>
+              <div class="text-sm text-muted-foreground">导出格式</div>
+              <p class="text-xs text-muted-foreground mt-2">支持所有流行的视频格式</p>
+            </div>
+            <div class="text-center">
+              <div class="text-4xl font-bold text-primary mb-2">50+</div>
+              <div class="text-sm text-muted-foreground">检测到的比赛类型</div>
+              <p class="text-xs text-muted-foreground mt-2">扣篮、三分球、盖帽、助攻等</p>
+            </div>
+            <div class="text-center">
+              <div class="text-4xl font-bold text-primary mb-2">∞</div>
+              <div class="text-sm text-muted-foreground">批量处理</div>
+              <p class="text-xs text-muted-foreground mt-2">同时处理无限场比赛</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="text-center">
+      <h2 class="text-3xl font-bold tracking-tight mb-4">
+        准备好在更短的时间内创建更多内容了吗？
+      </h2>
+      <p class="text-muted-foreground text-lg mb-8 max-w-2xl mx-auto">
+        立即开始免费试用，看看 AI 驱动的高光视频如何改变
+        您的篮球内容工作流程。
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href="/zh/pricing"
+          class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-10 px-4 py-2"
+        >
+          开始免费试用
+        </a>
+        <a
+          href="/zh/"
+          class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+        >
+          查看演示
+        </a>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

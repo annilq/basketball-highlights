@@ -1,0 +1,348 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@repo/ui';
+
+const title = "定价 - 篮球高光 AI";
+const description = "选择适合您需求的定价计划，开始使用 AI 驱动的篮球高光视频生成工具。";
+
+const plans = [
+  {
+    name: "入门计划",
+    description: "适合个人创作者和爱好者",
+    price: "$19",
+    period: "月",
+    popular: false,
+    variant: "outline",
+    features: [
+      "每月 5 个高光视频",
+      "最高 1080p 分辨率",
+      "社交媒体优化",
+      "基础编辑工具",
+      "电子邮件支持"
+    ],
+    href: "/signup",
+    cta: "开始免费试用"
+  },
+  {
+    name: "创作者计划",
+    description: "适合专业内容创作者和小型团队",
+    price: "$49",
+    period: "月",
+    popular: true,
+    variant: "default",
+    features: [
+      "每月 25 个高光视频",
+      "最高 4K 分辨率",
+      "社交媒体优化",
+      "高级编辑工具",
+      "自定义品牌",
+      "批量处理",
+      "优先电子邮件支持",
+      "模板库"
+    ],
+    href: "/signup",
+    cta: "开始免费试用"
+  },
+  {
+    name: "专业计划",
+    description: "适合大型媒体机构和团队",
+    price: "$99",
+    period: "月",
+    popular: false,
+    variant: "outline",
+    features: [
+      "无限高光视频",
+      "最高 4K 分辨率",
+      "社交媒体优化",
+      "高级编辑工具",
+      "自定义品牌",
+      "批量处理",
+      "24/7 优先支持",
+      "模板库",
+      "协作功能",
+      "分析与洞察"
+    ],
+    href: "/signup",
+    cta: "联系销售"
+  }
+];
+
+const comparisonColumns = ["功能", "入门计划", "创作者计划", "专业计划"];
+const comparisonRows = [
+  {
+    feature: "每月高光视频数量",
+    starter: "5",
+    creator: "25",
+    professional: "无限"
+  },
+  {
+    feature: "最高分辨率",
+    starter: "1080p",
+    creator: "4K",
+    professional: "4K"
+  },
+  {
+    feature: "社交媒体优化",
+    starter: true,
+    creator: true,
+    professional: true
+  },
+  {
+    feature: "基础编辑工具",
+    starter: true,
+    creator: true,
+    professional: true
+  },
+  {
+    feature: "高级编辑工具",
+    starter: false,
+    creator: true,
+    professional: true
+  },
+  {
+    feature: "自定义品牌",
+    starter: false,
+    creator: true,
+    professional: true
+  },
+  {
+    feature: "批量处理",
+    starter: false,
+    creator: true,
+    professional: true
+  },
+  {
+    feature: "模板库",
+    starter: false,
+    creator: true,
+    professional: true
+  },
+  {
+    feature: "协作功能",
+    starter: false,
+    creator: false,
+    professional: true
+  },
+  {
+    feature: "分析与洞察",
+    starter: false,
+    creator: false,
+    professional: true
+  },
+  {
+    feature: "电子邮件支持",
+    starter: true,
+    creator: "优先",
+    professional: "24/7 优先"
+  }
+];
+
+const faqs = [
+  {
+    question: "免费试用包括什么？",
+    answer: "我们的免费试用包括所有计划的完整功能，让您可以在决定订阅前充分体验我们的服务。试用期限为 7 天。"
+  },
+  {
+    question: "我可以随时取消订阅吗？",
+    answer: "是的，您可以随时取消订阅，没有长期合约。取消后，您将继续使用该服务直到当前计费周期结束。"
+  },
+  {
+    question: "支持哪些视频格式？",
+    answer: "我们支持所有主要的视频格式，包括 MP4、MOV、AVI 和 WMV 等。"
+  },
+  {
+    question: "处理一个完整的比赛需要多长时间？",
+    answer: "平均而言，我们的 AI 可以在不到 5 分钟内处理一场完整的篮球比赛。实际时间可能会因视频长度和质量而有所不同。"
+  },
+  {
+    question: "我可以升级或降级我的计划吗？",
+    answer: "是的，您可以随时升级或降级您的计划。升级将立即生效，降级将在当前计费周期结束后生效。"
+  },
+  {
+    question: "提供退款吗？",
+    answer: "我们提供 30 天退款保证。如果您对我们的服务不满意，您可以在订阅后的 30 天内申请全额退款。"
+  }
+];
+---
+
+<BaseLayout title={title} description={description}>
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <!-- Hero Section -->
+    <div class="text-center mb-16">
+      <h1 class="text-4xl font-bold tracking-tight mb-6">
+        选择适合您的计划
+      </h1>
+      <p class="text-xl text-muted-foreground max-w-3xl mx-auto">
+        无论您是个人创作者还是大型媒体机构，我们都有适合您的定价计划。
+      </p>
+    </div>
+
+    <!-- Pricing Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+      {plans.map((plan) => (
+        <Card key={plan.name} className={plan.popular ? "border-primary shadow-lg relative" : ""} client:visible>
+          {plan.popular && (
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2">
+              <span class="bg-primary text-primary-foreground text-xs font-semibold px-3 py-1 rounded-full">
+                最受欢迎
+              </span>
+            </div>
+          )}
+          <CardHeader>
+            <CardTitle className="text-2xl">{plan.name}</CardTitle>
+            <CardDescription>{plan.description}</CardDescription>
+            <div class="mt-4">
+              <span class="text-4xl font-bold">{plan.price}</span>
+              <span class="text-muted-foreground ml-2">/{plan.period}</span>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <ul class="space-y-3 mb-6">
+              {plan.features.map((feature, index) => (
+                <li key={index} class="flex items-start">
+                  <svg
+                    class="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span class="text-sm">{feature}</span>
+                </li>
+              ))}
+            </ul>
+            <Button
+              variant={plan.variant}
+              className="w-full"
+              asChild
+              client:visible
+            >
+              <a href={plan.href || '/signup'}>
+                {plan.cta}
+              </a>
+            </Button>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+
+    <!-- Feature Comparison -->
+    <section class="mb-20">
+      <h2 class="text-3xl font-bold tracking-tight mb-8 text-center">
+        功能对比
+      </h2>
+
+      <div class="max-w-4xl mx-auto overflow-x-auto">
+        <Card client:visible>
+          <CardContent className="pt-6">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b">
+                  {comparisonColumns.map((column) => (
+                    <th key={column} class={column === '功能' ? 'text-left' : 'text-center'} py-3 px-4 font-semibold>{column}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {comparisonRows.map((row, rowIndex) => (
+                  <tr key={rowIndex} class={rowIndex < comparisonRows.length - 1 ? 'border-b' : ''}>
+                    <td class="py-3 px-4">{row.feature}</td>
+                    <td class="text-center py-3 px-4">
+                      {typeof row.starter === 'boolean' ? (
+                        row.starter ? (
+                          <svg class="h-5 w-5 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                          </svg>
+                        ) : (
+                          <svg class="h-5 w-5 text-red-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        )
+                      ) : (
+                        <span>{row.starter}</span>
+                      )}
+                    </td>
+                    <td class="text-center py-3 px-4 font-semibold text-primary">
+                      {typeof row.creator === 'boolean' ? (
+                        row.creator ? (
+                          <svg class="h-5 w-5 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                          </svg>
+                        ) : (
+                          <svg class="h-5 w-5 text-red-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        )
+                      ) : (
+                        <span>{row.creator}</span>
+                      )}
+                    </td>
+                    <td class="text-center py-3 px-4 font-semibold">
+                      {typeof row.professional === 'boolean' ? (
+                        row.professional ? (
+                          <svg class="h-5 w-5 text-green-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                          </svg>
+                        ) : (
+                          <svg class="h-5 w-5 text-red-500 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        )
+                      ) : (
+                        <span>{row.professional}</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </CardContent>
+        </Card>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="mb-20">
+      <h2 class="text-3xl font-bold tracking-tight mb-8 text-center">
+        常见问题
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+        {faqs.map((faq, index) => (
+          <Card key={index} client:visible>
+            <CardHeader>
+              <CardTitle className="text-lg">{faq.question}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p class="text-sm text-muted-foreground">{faq.answer}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="text-center bg-muted/20 rounded-lg p-12">
+      <h2 class="text-3xl font-bold tracking-tight mb-4">
+        准备好开始了吗？
+      </h2>
+      <p class="text-muted-foreground text-lg mb-8 max-w-2xl mx-auto">
+        加入成千上万的篮球内容创作者，他们正在使用篮球高光 AI 节省数小时的编辑时间。
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <Button size="lg" asChild client:visible>
+          <a href="/zh/signup">
+            开始免费试用
+          </a>
+        </Button>
+        <Button variant="outline" size="lg" asChild client:visible>
+          <a href="/zh/features">
+            了解更多
+          </a>
+        </Button>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
