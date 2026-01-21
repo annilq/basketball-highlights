@@ -102,6 +102,7 @@ export const zhTranslations: Translations = {
     createCustomReport: "根据您的需要创建自定义报告",
     report: "报告",
     recent: "最近",
+    remove: "删除",
     your: "您的",
     recently: "最近",
     generated: "生成的",

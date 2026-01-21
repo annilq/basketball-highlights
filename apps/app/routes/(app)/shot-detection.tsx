@@ -305,7 +305,6 @@ function ShotDetectionPage() {
                     </div>
                     <Button
                       type="button"
-                      variant="secondary"
                       size="sm"
                       onClick={() => setSelectedFile(null)}
                       disabled={isPending}

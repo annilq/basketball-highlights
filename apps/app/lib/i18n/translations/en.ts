@@ -107,6 +107,7 @@ export const enTranslations: Translations = {
     createCustomReport: "Create a custom report based on your needs",
     report: "Report",
     recent: "Recent",
+    remove: "remove",
     your: "Your",
     recently: "recently",
     generated: "generated",
