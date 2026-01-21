@@ -25,15 +25,9 @@ export type ShotEvent = z.infer<typeof shotEventSchema>;
 export const shotDetectionRouter = router({
   detectShots: protectedProcedure
     .input(
-      z
-        .object({
-          videoUrl: z.url({ message: "videoUrl 必须是有效的 URL" }).optional(),
-          video: z.any().optional(),
-        })
-        .refine((input) => input.videoUrl || input.video, {
-          message: "Either videoUrl or video must be provided",
-          path: [],
-        }),
+      z.object({
+        videoUrl: z.url({ message: "videoUrl 必须是有效的 URL" }),
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       try {
@@ -41,39 +35,13 @@ export const shotDetectionRouter = router({
         // In production, this should be an environment variable
         const pythonServiceUrl = "http://localhost:8000/detect-shots";
 
-        let videoBlob: Blob;
-        let videoUrl: string | undefined;
-        let videoName: string | undefined;
-
-        // Handle different input types
-        if (input.videoUrl) {
-          // Fetch the video from the provided URL
-          videoUrl = input.videoUrl;
-          videoName = input.videoUrl.split("/").pop();
-
-          const videoResponse = await fetch(input.videoUrl);
-          if (!videoResponse.ok) {
-            throw new Error(
-              `Failed to fetch video: ${videoResponse.statusText}`,
-            );
-          }
-          videoBlob = await videoResponse.blob();
-        } else if (input.video) {
-          // Use the directly uploaded video file
-          videoBlob = input.video;
-          videoName = "uploaded_video.mp4";
-        } else {
-          throw new Error("Either videoUrl or video file must be provided");
-        }
-
-        // Create a FormData object to send the video
-        const formData = new FormData();
-        formData.append("video", videoBlob, videoName || "video.mp4");
-
-        // Call the Python service
+        // Call the Python service with videoUrl directly
         const detectionResponse = await fetch(pythonServiceUrl, {
           method: "POST",
-          body: formData,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ video_url: input.videoUrl }),
         });
 
         if (!detectionResponse.ok) {
@@ -90,7 +58,10 @@ export const shotDetectionRouter = router({
         // Get user information from context
         const userId = ctx.user.id;
         // teamId will be added later when team functionality is fully implemented
-        const teamId = undefined;
+        const teamId = null;
+
+        // Extract video name from URL
+        const videoName = input.videoUrl.split("/").pop();
 
         // Save the detection results to the database
         const savedDetection = await ctx.db
@@ -98,7 +69,7 @@ export const shotDetectionRouter = router({
           .values({
             userId: userId,
             teamId: teamId,
-            videoUrl: videoUrl,
+            videoUrl: input.videoUrl,
             videoName: videoName,
             attempts: detectionResult.total_attempts,
             makes: detectionResult.total_makes,
@@ -122,63 +93,36 @@ export const shotDetectionRouter = router({
         return detectionResult;
       } catch (error) {
         console.error("Error detecting shots:", error);
+        throw error;
       }
     }),
 
   generateShotClip: protectedProcedure
     .input(
-      z
-        .object({
-          videoUrl: z.url({ message: "videoUrl 必须是有效的 URL" }).optional(),
-          video: z.any().optional(),
-          shot_frame: z.number({ message: "shot_frame 必须是有效的数字" }),
-          duration: z
-            .number({ message: "duration 必须是有效的数字" })
-            .optional()
-            .default(3),
-        })
-        .refine((input) => input.videoUrl || input.video, {
-          message: "Either videoUrl or video must be provided",
-          path: [],
-        }),
+      z.object({
+        videoUrl: z.url({ message: "videoUrl 必须是有效的 URL" }),
+        shot_frame: z.number({ message: "shot_frame 必须是有效的数字" }),
+        duration: z
+          .number({ message: "duration 必须是有效的数字" })
+          .optional()
+          .default(3),
+      }),
     )
     .mutation(async ({ input }) => {
       try {
         const pythonServiceUrl = "http://localhost:8000/generate-shot-clip";
 
-        let videoBlob: Blob;
-        let videoName: string | undefined;
-
-        // Handle different input types
-        if (input.videoUrl) {
-          // Fetch the video from the provided URL
-          videoName = input.videoUrl.split("/").pop();
-
-          const videoResponse = await fetch(input.videoUrl);
-          if (!videoResponse.ok) {
-            throw new Error(
-              `Failed to fetch video: ${videoResponse.statusText}`,
-            );
-          }
-          videoBlob = await videoResponse.blob();
-        } else if (input.video) {
-          // Use the directly uploaded video file
-          videoBlob = input.video;
-          videoName = "uploaded_video.mp4";
-        } else {
-          throw new Error("Either videoUrl or video file must be provided");
-        }
-
-        // Create a FormData object to send the video and parameters
-        const formData = new FormData();
-        formData.append("video", videoBlob, videoName || "video.mp4");
-        formData.append("shot_frame", input.shot_frame.toString());
-        formData.append("duration", input.duration.toString());
-
-        // Call the Python service
+        // Call the Python service with videoUrl directly
         const clipResponse = await fetch(pythonServiceUrl, {
           method: "POST",
-          body: formData,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            video_url: input.videoUrl,
+            shot_frame: input.shot_frame,
+            duration: input.duration,
+          }),
         });
 
         if (!clipResponse.ok) {
@@ -192,58 +136,31 @@ export const shotDetectionRouter = router({
         return clipResult;
       } catch (error) {
         console.error("Error generating shot clip:", error);
+        throw error;
       }
     }),
 
   generateHighlights: protectedProcedure
     .input(
-      z
-        .object({
-          videoUrl: z.url({ message: "videoUrl 必须是有效的 URL" }).optional(),
-          video: z.any().optional(),
-          output_path: z.string().optional().default("highlights.mp4"),
-        })
-        .refine((input) => input.videoUrl || input.video, {
-          message: "Either videoUrl or video must be provided",
-          path: [],
-        }),
+      z.object({
+        videoUrl: z.url({ message: "videoUrl 必须是有效的 URL" }),
+        output_path: z.string().optional().default("highlights.mp4"),
+      }),
     )
     .mutation(async ({ input }) => {
       try {
         const pythonServiceUrl = "http://localhost:8000/generate-highlights";
 
-        let videoBlob: Blob;
-        let videoName: string | undefined;
-
-        // Handle different input types
-        if (input.videoUrl) {
-          // Fetch the video from the provided URL
-          videoName = input.videoUrl.split("/").pop();
-
-          const videoResponse = await fetch(input.videoUrl);
-          if (!videoResponse.ok) {
-            throw new Error(
-              `Failed to fetch video: ${videoResponse.statusText}`,
-            );
-          }
-          videoBlob = await videoResponse.blob();
-        } else if (input.video) {
-          // Use the directly uploaded video file
-          videoBlob = input.video;
-          videoName = "uploaded_video.mp4";
-        } else {
-          throw new Error("Either videoUrl or video file must be provided");
-        }
-
-        // Create a FormData object to send the video and parameters
-        const formData = new FormData();
-        formData.append("video", videoBlob, videoName || "video.mp4");
-        formData.append("output_path", input.output_path || "highlights.mp4");
-
-        // Call the Python service
+        // Call the Python service with videoUrl directly
         const highlightsResponse = await fetch(pythonServiceUrl, {
           method: "POST",
-          body: formData,
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            video_url: input.videoUrl,
+            output_path: input.output_path,
+          }),
         });
 
         if (!highlightsResponse.ok) {
@@ -257,6 +174,7 @@ export const shotDetectionRouter = router({
         return highlightsResult;
       } catch (error) {
         console.error("Error generating highlights:", error);
+        throw error;
       }
     }),
 });

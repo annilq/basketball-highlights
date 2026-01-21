@@ -99,35 +99,77 @@ function ShotDetectionPage() {
   const generateHighlightsMutation = useGenerateHighlightsMutation();
   const generateShotClipMutation = useGenerateShotClipMutation();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  // Upload video to Hono API and return URL
+  const uploadVideo = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append("video", file);
+
+    const response = await fetch("/api/shot-detection/upload", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to upload video");
+    }
+
+    const data = await response.json();
+    return data.videoUrl;
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    let finalVideoUrl: string | undefined;
+
     if (selectedFile) {
-      detectShotsMutation.mutate({ file: selectedFile });
+      try {
+        // First upload file to get URL
+        const uploadedUrl = await uploadVideo(selectedFile);
+        finalVideoUrl = uploadedUrl;
+        setVideoUrl(uploadedUrl);
+      } catch (error) {
+        console.error("Error uploading video:", error);
+        return;
+      }
     } else {
       const formData = new FormData(e.currentTarget);
       const currentVideoUrl = formData.get("videoUrl") as string;
+      finalVideoUrl = currentVideoUrl;
       setVideoUrl(currentVideoUrl);
+    }
 
-      if (currentVideoUrl) {
-        detectShotsMutation.mutate({ videoUrl: currentVideoUrl });
-      }
+    if (finalVideoUrl) {
+      detectShotsMutation.mutate({ videoUrl: finalVideoUrl });
     }
   };
 
-  const handleGenerateHighlights = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleGenerateHighlights = async (
+    e: React.MouseEvent<HTMLButtonElement>,
+  ) => {
     e.preventDefault();
 
+    let finalVideoUrl: string | undefined;
+
     if (selectedFile) {
-      generateHighlightsMutation.mutate({ video: selectedFile });
+      try {
+        // First upload file to get URL
+        const uploadedUrl = await uploadVideo(selectedFile);
+        finalVideoUrl = uploadedUrl;
+        setVideoUrl(uploadedUrl);
+      } catch (error) {
+        console.error("Error uploading video:", error);
+        return;
+      }
     } else {
       // Get the latest value from the input using ref
       const currentVideoUrl = videoUrlRef.current?.value || videoUrl;
+      finalVideoUrl = currentVideoUrl;
       setVideoUrl(currentVideoUrl);
+    }
 
-      if (currentVideoUrl && currentVideoUrl.trim() !== "") {
-        generateHighlightsMutation.mutate({ videoUrl: currentVideoUrl });
-      }
+    if (finalVideoUrl?.trim() !== "") {
+      generateHighlightsMutation.mutate({ videoUrl: finalVideoUrl });
     }
   };
 
@@ -136,16 +178,26 @@ function ShotDetectionPage() {
     setSelectedFile(file);
   };
 
-  const handleGenerateClip = (event: ShotEvent) => {
+  const handleGenerateClip = async (event: ShotEvent) => {
+    let finalVideoUrl: string | undefined;
+
     if (selectedFile) {
-      generateShotClipMutation.mutate({
-        video: selectedFile,
-        shot_frame: event.frame,
-        duration: 3,
-      });
+      try {
+        // First upload file to get URL
+        const uploadedUrl = await uploadVideo(selectedFile);
+        finalVideoUrl = uploadedUrl;
+        setVideoUrl(uploadedUrl);
+      } catch (error) {
+        console.error("Error uploading video:", error);
+        return;
+      }
     } else if (videoUrl) {
+      finalVideoUrl = videoUrl;
+    }
+
+    if (finalVideoUrl) {
       generateShotClipMutation.mutate({
-        videoUrl,
+        videoUrl: finalVideoUrl,
         shot_frame: event.frame,
         duration: 3,
       });
@@ -331,7 +383,7 @@ function ShotDetectionPage() {
 
           {isError && (
             <div className="mt-4 flex items-start gap-3 rounded-lg bg-destructive/10 p-4 text-destructive dark:bg-destructive/20">
-              <AlertCircle className="h-5 w-5 flex-shrink-0" />
+              <AlertCircle className="h-5 w-5 shrink-0" />
               <div className="flex-1">
                 <p className="font-semibold">
                   {t("shotDetection.detectionFailed")}

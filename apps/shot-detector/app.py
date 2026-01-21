@@ -1,8 +1,9 @@
 import os
-import tempfile
+from typing import Optional
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 from shot_detector_api import ShotDetectorAPI
 
 app = FastAPI(
@@ -12,37 +13,34 @@ app = FastAPI(
 )
 
 
+class DetectShotsRequest(BaseModel):
+    video_url: str
+
+
+class GenerateShotClipRequest(BaseModel):
+    video_url: str
+    shot_frame: int = 0
+    duration: int = 3
+
+
+class GenerateHighlightsRequest(BaseModel):
+    video_url: str
+    output_path: str = "highlights.mp4"
+
+
 # Initialize detector with pre-trained model
 model_path = os.environ.get("MODEL_PATH", "best.pt")
 detector = ShotDetectorAPI(model_path)
 
 
 @app.post("/detect-shots")
-async def detect_shots(video: UploadFile = File(...)):
-    """Upload a video file to detect basketball shots"""
+async def detect_shots(request: DetectShotsRequest):
+    """Detect basketball shots from a video URL"""
     try:
-        # Save uploaded video to temporary file
-        with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as temp_file:
-            content = await video.read()
-            temp_file.write(content)
-            temp_video_path = temp_file.name
-
-        # Run shot detection
-        result = detector.detect_shots(temp_video_path)
-
-        # Clean up temporary file
-        os.unlink(temp_video_path)
-
+        result = detector.detect_shots(request.video_url)
         return JSONResponse(content=result)
 
     except Exception as e:
-        # Clean up temporary file if it exists
-        if 'temp_video_path' in locals():
-            try:
-                os.unlink(temp_video_path)
-            except:
-                pass
-
         raise HTTPException(
             status_code=500, detail=f"Error processing video: {str(e)}")
 
@@ -67,72 +65,31 @@ async def health_check():
 
 
 @app.post("/generate-shot-clip")
-async def generate_shot_clip(
-    video: UploadFile = File(...),
-    shot_frame: int = 0,
-    duration: int = 3
-):
-    """Generate a video clip around a shot frame"""
+async def generate_shot_clip(request: GenerateShotClipRequest):
+    """Generate a video clip around a shot frame from a video URL"""
     try:
-        # Save uploaded video to temporary file
-        with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as temp_file:
-            content = await video.read()
-            temp_file.write(content)
-            temp_video_path = temp_file.name
-
-        # Generate shot clip
         clip_path = detector.generate_shot_clip(
-            video_path=temp_video_path,
-            shot_frame=shot_frame,
-            duration=duration
+            video_path=request.video_url,
+            shot_frame=request.shot_frame,
+            duration=request.duration
         )
-
-        # Clean up temporary file
-        os.unlink(temp_video_path)
 
         return {"clip_path": clip_path}
 
     except Exception as e:
-        # Clean up temporary file if it exists
-        if 'temp_video_path' in locals():
-            try:
-                os.unlink(temp_video_path)
-            except:
-                pass
-
         raise HTTPException(
             status_code=500, detail=f"Error generating shot clip: {str(e)}")
 
 
 @app.post("/generate-highlights")
-async def generate_highlights(
-    video: UploadFile = File(...),
-    output_path: str = "highlights.mp4"
-):
-    """Generate a highlights video by detecting shots and merging made shot clips"""
+async def generate_highlights(request: GenerateHighlightsRequest):
+    """Generate a highlights video from a video URL"""
     try:
-        # Save uploaded video to temporary file
-        with tempfile.NamedTemporaryFile(suffix=".mp4", delete=False) as temp_file:
-            content = await video.read()
-            temp_file.write(content)
-            temp_video_path = temp_file.name
-
-        # Generate highlights video
         highlights_path = detector.generate_highlights(
-            temp_video_path, output_path=output_path)
-
-        # Clean up temporary file
-        os.unlink(temp_video_path)
+            request.video_url, output_path=request.output_path)
 
         return {"highlights_path": highlights_path}
 
     except Exception as e:
-        # Clean up temporary file if it exists
-        if 'temp_video_path' in locals():
-            try:
-                os.unlink(temp_video_path)
-            except:
-                pass
-
         raise HTTPException(
             status_code=500, detail=f"Error generating highlights: {str(e)}")
