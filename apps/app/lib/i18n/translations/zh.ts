@@ -127,6 +127,8 @@ export const zhTranslations: Translations = {
     performance: "绩效",
     selectLanguage: "选择您偏好的语言",
     application: "应用",
+    myShots: "我的投篮",
+    viewDetails: "查看详情",
   },
   users: {
     title: "用户",
@@ -275,5 +277,17 @@ export const zhTranslations: Translations = {
     selectVideoFile: "选择视频文件",
     videoUrlPlaceholder: "https://example.com/basketball-game.mp4",
     orEnterUrl: "或输入URL",
+    myShotsSubtitle: "查看和管理您的投篮检测历史",
+    noShotsFound: "未找到投篮记录",
+    noShotsDescription:
+      "您尚未上传任何用于投篮检测的视频。请上传视频开始使用。",
+    shotDetails: "投篮详情",
+    detectedOn: "检测于",
+    detailTitle: "投篮检测详情",
+    detailFailed: "加载投篮检测详情失败",
+    detailNotFound: "未找到投篮检测记录",
+    notFoundMessage: "未能找到请求的投篮检测记录。",
+    videoPreview: "视频预览",
+    videoPreviewDescription: "观看带有检测投篮的视频",
   },
 };

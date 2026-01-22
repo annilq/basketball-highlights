@@ -134,6 +134,8 @@ export const enTranslations: Translations = {
     performance: "Performance",
     selectLanguage: "Select your preferred language",
     application: "Application",
+    myShots: "My Shots",
+    viewDetails: "View Details",
   },
   users: {
     title: "Users",
@@ -292,5 +294,17 @@ export const enTranslations: Translations = {
     selectVideoFile: "Select Video File",
     videoUrlPlaceholder: "https://example.com/basketball-game.mp4",
     orEnterUrl: "or enter a URL",
+    myShotsSubtitle: "View and manage your shot detection history",
+    noShotsFound: "No shots found",
+    noShotsDescription:
+      "You haven't uploaded any videos for shot detection yet. Upload a video to get started.",
+    shotDetails: "Shot Details",
+    detectedOn: "Detected on",
+    detailTitle: "Shot Detection Detail",
+    detailFailed: "Failed to load shot detection details",
+    detailNotFound: "Shot detection not found",
+    notFoundMessage: "The requested shot detection record could not be found.",
+    videoPreview: "Video Preview",
+    videoPreviewDescription: "Watch the video with detected shots",
   },
 };

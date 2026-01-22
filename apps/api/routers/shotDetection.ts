@@ -1,4 +1,5 @@
 import { shotDetection, shotEvent } from "@repo/db";
+import { and, asc, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 import { protectedProcedure, router } from "../lib/trpc.js";
 
@@ -95,6 +96,65 @@ export const shotDetectionRouter = router({
         console.error("Error detecting shots:", error);
         throw error;
       }
+    }),
+
+  myShots: protectedProcedure.query(async ({ ctx }) => {
+    const userId = ctx.user.id;
+
+    // Fetch all shotDetection records for the current user
+    const myShots = await ctx.db
+      .select()
+      .from(shotDetection)
+      .where(eq(shotDetection.userId, userId))
+      .orderBy(desc(shotDetection.createdAt));
+
+    return myShots;
+  }),
+
+  getShot: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const shot = await ctx.db
+        .select()
+        .from(shotDetection)
+        .where(
+          and(
+            eq(shotDetection.id, input.id),
+            eq(shotDetection.userId, ctx.user.id),
+          ),
+        )
+        .limit(1)
+        .execute();
+
+      if (!shot[0]) {
+        throw new Error("Shot detection not found");
+      }
+
+      // Fetch associated shot events
+      const shotEvents = await ctx.db
+        .select()
+        .from(shotEvent)
+        .where(eq(shotEvent.shotDetectionId, input.id))
+        .orderBy(asc(shotEvent.frame))
+        .execute();
+
+      // Format the shot events to match the expected schema
+      const formattedShotEvents = shotEvents.map((event) => ({
+        frame: event.frame,
+        is_make: event.isMake === 1,
+        attempts: event.attempts,
+        makes: event.makes,
+      }));
+
+      // Return the shot detection with formatted shot events
+      return {
+        ...shot[0],
+        shot_events: formattedShotEvents,
+      };
     }),
 
   generateShotClip: protectedProcedure

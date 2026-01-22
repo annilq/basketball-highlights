@@ -4,7 +4,7 @@
  * Handles basketball video shot detection, caching, and error management.
  */
 
-import { useMutation, type QueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, type QueryClient } from "@tanstack/react-query";
 
 export const shotDetectionQueryKey = ["shotDetection"] as const;
 
@@ -25,6 +25,19 @@ export interface ShotDetectionResult {
   total_makes: number;
   shooting_percentage: number;
   shot_events: ShotEvent[];
+}
+
+export interface ShotDetectionRecord {
+  id: string;
+  userId: string;
+  teamId: string | null;
+  videoUrl: string;
+  videoName: string;
+  attempts: number;
+  makes: number;
+  shootingPercentage: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export function useDetectShotsMutation() {
@@ -207,6 +220,56 @@ export function useGenerateHighlightsMutation() {
     onError: (error) => {
       console.error("Failed to generate highlights:", error);
     },
+  });
+}
+
+export function useMyShotsQuery() {
+  return useQuery<ShotDetectionRecord[], Error>({
+    queryKey: [...shotDetectionQueryKey, "myShots"],
+    queryFn: async () => {
+      const response = await fetch("/api/trpc/shotDetection.myShots", {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        const error = await response.text();
+        throw new Error(error || "Failed to fetch my shots");
+      }
+
+      const result = await response.json();
+      return result.result.data as ShotDetectionRecord[];
+    },
+  });
+}
+
+export function useGetShotQuery(shotId: string | undefined) {
+  return useQuery<ShotDetectionRecord & { shot_events: ShotEvent[] }, Error>({
+    queryKey: [...shotDetectionQueryKey, "getShot", shotId],
+    queryFn: async () => {
+      if (!shotId) {
+        throw new Error("Shot ID is required");
+      }
+
+      // For GET requests, tRPC expects input as a JSON string in the "input" query parameter
+      const input = JSON.stringify({ id: shotId });
+      const response = await fetch(
+        `/api/trpc/shotDetection.getShot?input=${encodeURIComponent(input)}`,
+        {
+          method: "GET",
+        },
+      );
+
+      if (!response.ok) {
+        const error = await response.text();
+        throw new Error(error || "Failed to fetch shot details");
+      }
+
+      const result = await response.json();
+      return result.result.data as ShotDetectionRecord & {
+        shot_events: ShotEvent[];
+      };
+    },
+    enabled: !!shotId,
   });
 }
 

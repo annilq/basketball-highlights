@@ -16,9 +16,11 @@ import { Route as appUsersRouteImport } from './../routes/(app)/users'
 import { Route as appShotDetectionRouteImport } from './../routes/(app)/shot-detection'
 import { Route as appSettingsRouteImport } from './../routes/(app)/settings'
 import { Route as appReportsRouteImport } from './../routes/(app)/reports'
+import { Route as appMyShotsRouteImport } from './../routes/(app)/my-shots'
 import { Route as appDashboardRouteImport } from './../routes/(app)/dashboard'
 import { Route as appAnalyticsRouteImport } from './../routes/(app)/analytics'
 import { Route as appAboutRouteImport } from './../routes/(app)/about'
+import { Route as appShotdetectiondetailShotIdRouteImport } from './../routes/(app)/shotdetectiondetail/$shotId'
 
 const appRouteRoute = appRouteRouteImport.update({
   id: '/(app)',
@@ -54,6 +56,11 @@ const appReportsRoute = appReportsRouteImport.update({
   path: '/reports',
   getParentRoute: () => appRouteRoute,
 } as any)
+const appMyShotsRoute = appMyShotsRouteImport.update({
+  id: '/my-shots',
+  path: '/my-shots',
+  getParentRoute: () => appRouteRoute,
+} as any)
 const appDashboardRoute = appDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -69,28 +76,38 @@ const appAboutRoute = appAboutRouteImport.update({
   path: '/about',
   getParentRoute: () => appRouteRoute,
 } as any)
+const appShotdetectiondetailShotIdRoute =
+  appShotdetectiondetailShotIdRouteImport.update({
+    id: '/shotdetectiondetail/$shotId',
+    path: '/shotdetectiondetail/$shotId',
+    getParentRoute: () => appRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/about': typeof appAboutRoute
   '/analytics': typeof appAnalyticsRoute
   '/dashboard': typeof appDashboardRoute
+  '/my-shots': typeof appMyShotsRoute
   '/reports': typeof appReportsRoute
   '/settings': typeof appSettingsRoute
   '/shot-detection': typeof appShotDetectionRoute
   '/users': typeof appUsersRoute
   '/login': typeof authLoginRoute
   '/': typeof appIndexRoute
+  '/shotdetectiondetail/$shotId': typeof appShotdetectiondetailShotIdRoute
 }
 export interface FileRoutesByTo {
   '/about': typeof appAboutRoute
   '/analytics': typeof appAnalyticsRoute
   '/dashboard': typeof appDashboardRoute
+  '/my-shots': typeof appMyShotsRoute
   '/reports': typeof appReportsRoute
   '/settings': typeof appSettingsRoute
   '/shot-detection': typeof appShotDetectionRoute
   '/users': typeof appUsersRoute
   '/login': typeof authLoginRoute
   '/': typeof appIndexRoute
+  '/shotdetectiondetail/$shotId': typeof appShotdetectiondetailShotIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -98,12 +115,14 @@ export interface FileRoutesById {
   '/(app)/about': typeof appAboutRoute
   '/(app)/analytics': typeof appAnalyticsRoute
   '/(app)/dashboard': typeof appDashboardRoute
+  '/(app)/my-shots': typeof appMyShotsRoute
   '/(app)/reports': typeof appReportsRoute
   '/(app)/settings': typeof appSettingsRoute
   '/(app)/shot-detection': typeof appShotDetectionRoute
   '/(app)/users': typeof appUsersRoute
   '/(auth)/login': typeof authLoginRoute
   '/(app)/': typeof appIndexRoute
+  '/(app)/shotdetectiondetail/$shotId': typeof appShotdetectiondetailShotIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -111,35 +130,41 @@ export interface FileRouteTypes {
     | '/about'
     | '/analytics'
     | '/dashboard'
+    | '/my-shots'
     | '/reports'
     | '/settings'
     | '/shot-detection'
     | '/users'
     | '/login'
     | '/'
+    | '/shotdetectiondetail/$shotId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/about'
     | '/analytics'
     | '/dashboard'
+    | '/my-shots'
     | '/reports'
     | '/settings'
     | '/shot-detection'
     | '/users'
     | '/login'
     | '/'
+    | '/shotdetectiondetail/$shotId'
   id:
     | '__root__'
     | '/(app)'
     | '/(app)/about'
     | '/(app)/analytics'
     | '/(app)/dashboard'
+    | '/(app)/my-shots'
     | '/(app)/reports'
     | '/(app)/settings'
     | '/(app)/shot-detection'
     | '/(app)/users'
     | '/(auth)/login'
     | '/(app)/'
+    | '/(app)/shotdetectiondetail/$shotId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -198,6 +223,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appReportsRouteImport
       parentRoute: typeof appRouteRoute
     }
+    '/(app)/my-shots': {
+      id: '/(app)/my-shots'
+      path: '/my-shots'
+      fullPath: '/my-shots'
+      preLoaderRoute: typeof appMyShotsRouteImport
+      parentRoute: typeof appRouteRoute
+    }
     '/(app)/dashboard': {
       id: '/(app)/dashboard'
       path: '/dashboard'
@@ -219,6 +251,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof appAboutRouteImport
       parentRoute: typeof appRouteRoute
     }
+    '/(app)/shotdetectiondetail/$shotId': {
+      id: '/(app)/shotdetectiondetail/$shotId'
+      path: '/shotdetectiondetail/$shotId'
+      fullPath: '/shotdetectiondetail/$shotId'
+      preLoaderRoute: typeof appShotdetectiondetailShotIdRouteImport
+      parentRoute: typeof appRouteRoute
+    }
   }
 }
 
@@ -226,22 +265,26 @@ interface appRouteRouteChildren {
   appAboutRoute: typeof appAboutRoute
   appAnalyticsRoute: typeof appAnalyticsRoute
   appDashboardRoute: typeof appDashboardRoute
+  appMyShotsRoute: typeof appMyShotsRoute
   appReportsRoute: typeof appReportsRoute
   appSettingsRoute: typeof appSettingsRoute
   appShotDetectionRoute: typeof appShotDetectionRoute
   appUsersRoute: typeof appUsersRoute
   appIndexRoute: typeof appIndexRoute
+  appShotdetectiondetailShotIdRoute: typeof appShotdetectiondetailShotIdRoute
 }
 
 const appRouteRouteChildren: appRouteRouteChildren = {
   appAboutRoute: appAboutRoute,
   appAnalyticsRoute: appAnalyticsRoute,
   appDashboardRoute: appDashboardRoute,
+  appMyShotsRoute: appMyShotsRoute,
   appReportsRoute: appReportsRoute,
   appSettingsRoute: appSettingsRoute,
   appShotDetectionRoute: appShotDetectionRoute,
   appUsersRoute: appUsersRoute,
   appIndexRoute: appIndexRoute,
+  appShotdetectiondetailShotIdRoute: appShotdetectiondetailShotIdRoute,
 }
 
 const appRouteRouteWithChildren = appRouteRoute._addFileChildren(
