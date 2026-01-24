@@ -38,48 +38,28 @@ export interface ShotDetectionRecord {
   shootingPercentage: string;
   createdAt: Date;
   updatedAt: Date;
+  shot_events: ShotEvent[];
 }
 
 export function useDetectShotsMutation() {
-  return useMutation<ShotDetectionResult, Error, DetectShotsInput>({
-    mutationFn: async ({ videoUrl, file }) => {
-      // If file is provided, use FormData for file upload
-      if (file) {
-        const formData = new FormData();
-        formData.append("video", file, file.name);
-
-        const response = await fetch("/api/shot-detection/upload", {
-          method: "POST",
-          body: formData,
-        });
-
-        if (!response.ok) {
-          const error = await response.text();
-          throw new Error(error || "Failed to detect shots");
-        }
-
-        return response.json() as Promise<ShotDetectionResult>;
-      }
+  return useMutation<ShotDetectionRecord, Error, DetectShotsInput>({
+    mutationFn: async ({ videoUrl }) => {
       // Otherwise, use JSON for URL input
-      else if (videoUrl) {
-        const response = await fetch("/api/trpc/shotDetection.detectShots", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ videoUrl }),
-        });
+      const response = await fetch("/api/trpc/shotDetection.detectShots", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ videoUrl }),
+      });
 
-        if (!response.ok) {
-          const error = await response.text();
-          throw new Error(error || "Failed to detect shots");
-        }
-
-        const result = await response.json();
-        return result.result.data as ShotDetectionResult;
-      } else {
-        throw new Error("Either videoUrl or file must be provided");
+      if (!response.ok) {
+        const error = await response.text();
+        throw new Error(error || "Failed to detect shots");
       }
+
+      const result = await response.json();
+      return result.result.data as ShotDetectionRecord;
     },
     onSuccess: (data) => {
       console.log("Shot detection completed:", data);
@@ -92,7 +72,6 @@ export function useDetectShotsMutation() {
 
 export interface GenerateShotClipInput {
   videoUrl?: string;
-  video?: File;
   shot_frame: number;
   duration?: number;
 }
@@ -103,28 +82,8 @@ export interface GenerateShotClipResult {
 
 export function useGenerateShotClipMutation() {
   return useMutation<GenerateShotClipResult, Error, GenerateShotClipInput>({
-    mutationFn: async ({ videoUrl, video, shot_frame, duration = 3 }) => {
-      // If video is provided, use FormData for file upload
-      if (video) {
-        const formData = new FormData();
-        formData.append("video", video, video.name);
-        formData.append("shot_frame", shot_frame.toString());
-        formData.append("duration", duration.toString());
-
-        const response = await fetch("/api/shot-detection/generate-clip", {
-          method: "POST",
-          body: formData,
-        });
-
-        if (!response.ok) {
-          const error = await response.text();
-          throw new Error(error || "Failed to generate shot clip");
-        }
-
-        return response.json() as Promise<GenerateShotClipResult>;
-      }
-      // Otherwise, use JSON for URL input
-      else if (videoUrl) {
+    mutationFn: async ({ videoUrl, shot_frame, duration = 3 }) => {
+      if (videoUrl) {
         const response = await fetch(
           "/api/trpc/shotDetection.generateShotClip",
           {
@@ -158,7 +117,6 @@ export function useGenerateShotClipMutation() {
 
 export interface GenerateHighlightsInput {
   videoUrl?: string;
-  video?: File;
   output_path?: string;
 }
 
@@ -168,30 +126,9 @@ export interface GenerateHighlightsResult {
 
 export function useGenerateHighlightsMutation() {
   return useMutation<GenerateHighlightsResult, Error, GenerateHighlightsInput>({
-    mutationFn: async ({ videoUrl, video, output_path = "highlights.mp4" }) => {
+    mutationFn: async ({ videoUrl, output_path = "highlights.mp4" }) => {
       // If video is provided, use FormData for file upload
-      if (video) {
-        const formData = new FormData();
-        formData.append("video", video, video.name);
-        formData.append("output_path", output_path);
-
-        const response = await fetch(
-          "/api/shot-detection/generate-highlights",
-          {
-            method: "POST",
-            body: formData,
-          },
-        );
-
-        if (!response.ok) {
-          const error = await response.text();
-          throw new Error(error || "Failed to generate highlights");
-        }
-
-        return response.json() as Promise<GenerateHighlightsResult>;
-      }
-      // Otherwise, use JSON for URL input
-      else if (videoUrl) {
+      if (videoUrl) {
         const response = await fetch(
           "/api/trpc/shotDetection.generateHighlights",
           {

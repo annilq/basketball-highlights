@@ -13,7 +13,7 @@ import {
   Switch,
 } from "@repo/ui";
 import { createFileRoute } from "@tanstack/react-router";
-import { Bell, Palette, Shield, User } from "lucide-react";
+import { Palette, User } from "lucide-react";
 
 export const Route = createFileRoute("/(app)/settings")({
   component: Settings,
@@ -59,7 +59,7 @@ function Settings() {
         </Card>
 
         {/* Notification Settings */}
-        <Card>
+        {/* <Card>
           <CardHeader>
             <div className="flex items-center gap-2">
               <Bell className="h-5 w-5" />
@@ -94,10 +94,10 @@ function Settings() {
               <Switch id="push-notifications" />
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
 
         {/* Security Settings */}
-        <Card>
+        {/* <Card>
           <CardHeader>
             <div className="flex items-center gap-2">
               <Shield className="h-5 w-5" />
@@ -117,7 +117,7 @@ function Settings() {
               </Button>
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
 
         {/* Appearance Settings */}
         <Card>

@@ -1,13 +1,6 @@
+import { ShotDetectionResult } from "@/components/shotDetection/shotResult";
 import { useI18n } from "@/lib/i18n";
-import type {
-  ShotDetectionResult,
-  ShotEvent,
-} from "@/lib/queries/shot-detection";
-import {
-  useDetectShotsMutation,
-  useGenerateHighlightsMutation,
-  useGenerateShotClipMutation,
-} from "@/lib/queries/shot-detection";
+import { useDetectShotsMutation } from "@/lib/queries/shot-detection";
 import {
   Button,
   Card,
@@ -17,18 +10,10 @@ import {
   CardTitle,
   Input,
   Label,
-  Separator,
   Skeleton,
 } from "@repo/ui";
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  AlertCircle,
-  CheckCircle2,
-  Download,
-  Film,
-  TrendingUp,
-  Upload,
-} from "lucide-react";
+import { AlertCircle, Film, TrendingUp, Upload } from "lucide-react";
 import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 
@@ -36,68 +21,12 @@ export const Route = createFileRoute("/(app)/shot-detection")({
   component: ShotDetectionPage,
 });
 
-interface DetectionStatsProps {
-  label: string;
-  value: number | string;
-  icon: React.ElementType;
-}
-
-function DetectionStats({ label, value, icon: Icon }: DetectionStatsProps) {
-  return (
-    <div className="text-center">
-      <Icon className="mx-auto mb-2 h-5 w-5 text-muted-foreground" />
-      <p className="text-sm text-muted-foreground">{label}</p>
-      <p className="text-2xl font-bold">{value}</p>
-    </div>
-  );
-}
-
-interface ShotEventProps {
-  event: ShotEvent;
-  videoUrl?: string;
-  selectedFile?: File | null;
-  onGenerateClip?: (event: ShotEvent) => void;
-}
-
-function ShotEvent({ event, onGenerateClip }: ShotEventProps) {
-  const { t } = useI18n();
-  return (
-    <div className="flex items-center justify-between rounded-md bg-muted p-3">
-      <div>
-        <p className="font-medium">
-          {t("shotDetection.shot")} {event.attempts}
-        </p>
-        <p className="text-sm text-muted-foreground">
-          {t("shotDetection.frame")}: {event.frame}
-        </p>
-      </div>
-      <div className="flex items-center space-x-2">
-        <Button size="sm" onClick={() => onGenerateClip?.(event)}>
-          <Download className="h-3 w-3 mr-1" />
-          {t("shotDetection.generateClip")}
-        </Button>
-        <div
-          className={`rounded-full px-3 py-1 text-sm font-medium ${
-            event.is_make
-              ? "bg-green-500/10 text-green-600 dark:bg-green-500/20 dark:text-green-400"
-              : "bg-destructive/10 text-destructive dark:bg-destructive/20 dark:text-destructive"
-          }`}
-        >
-          {event.is_make ? t("shotDetection.make") : t("shotDetection.miss")}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 function ShotDetectionPage() {
   const { t } = useI18n();
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const [videoUrl, setVideoUrl] = React.useState<string | undefined>();
   const videoUrlRef = React.useRef<HTMLInputElement>(null);
   const detectShotsMutation = useDetectShotsMutation();
-  const generateHighlightsMutation = useGenerateHighlightsMutation();
-  const generateShotClipMutation = useGenerateShotClipMutation();
 
   // Upload video to Hono API and return URL
   const uploadVideo = async (file: File): Promise<string> => {
@@ -144,64 +73,9 @@ function ShotDetectionPage() {
     }
   };
 
-  const handleGenerateHighlights = async (
-    e: React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    e.preventDefault();
-
-    let finalVideoUrl: string | undefined;
-
-    if (selectedFile) {
-      try {
-        // First upload file to get URL
-        const uploadedUrl = await uploadVideo(selectedFile);
-        finalVideoUrl = uploadedUrl;
-        setVideoUrl(uploadedUrl);
-      } catch (error) {
-        console.error("Error uploading video:", error);
-        return;
-      }
-    } else {
-      // Get the latest value from the input using ref
-      const currentVideoUrl = videoUrlRef.current?.value || videoUrl;
-      finalVideoUrl = currentVideoUrl;
-      setVideoUrl(currentVideoUrl);
-    }
-
-    if (finalVideoUrl?.trim() !== "") {
-      generateHighlightsMutation.mutate({ videoUrl: finalVideoUrl });
-    }
-  };
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setSelectedFile(file);
-  };
-
-  const handleGenerateClip = async (event: ShotEvent) => {
-    let finalVideoUrl: string | undefined;
-
-    if (selectedFile) {
-      try {
-        // First upload file to get URL
-        const uploadedUrl = await uploadVideo(selectedFile);
-        finalVideoUrl = uploadedUrl;
-        setVideoUrl(uploadedUrl);
-      } catch (error) {
-        console.error("Error uploading video:", error);
-        return;
-      }
-    } else if (videoUrl) {
-      finalVideoUrl = videoUrl;
-    }
-
-    if (finalVideoUrl) {
-      generateShotClipMutation.mutate({
-        videoUrl: finalVideoUrl,
-        shot_frame: event.frame,
-        duration: 3,
-      });
-    }
   };
 
   // Drag and drop functionality
@@ -219,10 +93,9 @@ function ShotDetectionPage() {
   const { data, status, error } = detectShotsMutation;
   const isPending = status === "pending";
   const isError = status === "error";
-  const shotData = data as ShotDetectionResult | undefined;
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto py-4">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2">{t("shotDetection.title")}</h1>
         <p className="text-muted-foreground">{t("shotDetection.subtitle")}</p>
@@ -354,28 +227,6 @@ function ShotDetectionPage() {
                     </>
                   )}
                 </Button>
-                <Button
-                  type="button"
-                  disabled={
-                    isPending ||
-                    generateHighlightsMutation.isPending ||
-                    (!selectedFile && !videoUrl)
-                  }
-                  className="flex-1"
-                  onClick={handleGenerateHighlights}
-                >
-                  {generateHighlightsMutation.isPending ? (
-                    <>
-                      <TrendingUp className="mr-2 h-4 w-4 animate-spin" />
-                      {t("shotDetection.generatingHighlights")}
-                    </>
-                  ) : (
-                    <>
-                      <Download className="mr-2 h-4 w-4" />
-                      {t("shotDetection.generateHighlights")}
-                    </>
-                  )}
-                </Button>
               </div>
             </div>
           </form>
@@ -427,78 +278,7 @@ function ShotDetectionPage() {
         </Card>
       )}
 
-      {shotData && (
-        <>
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5" />
-                {t("shotDetection.detectionResults")}
-              </CardTitle>
-              <CardDescription>
-                {t("shotDetection.resultsDescription")}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-                <DetectionStats
-                  label={t("shotDetection.totalAttempts")}
-                  value={shotData.total_attempts}
-                  icon={Film}
-                />
-                <DetectionStats
-                  label={t("shotDetection.successfulMakes")}
-                  value={shotData.total_makes}
-                  icon={CheckCircle2}
-                />
-                <DetectionStats
-                  label={t("shotDetection.shootingPercentage")}
-                  value={`${shotData.shooting_percentage}%`}
-                  icon={TrendingUp}
-                />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Download className="h-5 w-5" />
-                {t("shotDetection.shotEventsTimeline")}
-              </CardTitle>
-              <CardDescription>
-                {t("shotDetection.timelineDescription")}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Separator className="mb-4" />
-              <div className="space-y-2">
-                {shotData.shot_events.map((event) => (
-                  <ShotEvent
-                    key={`${event.frame}-${event.attempts}`}
-                    event={event}
-                    videoUrl={videoUrl}
-                    selectedFile={selectedFile}
-                    onGenerateClip={handleGenerateClip}
-                  />
-                ))}
-              </div>
-
-              {shotData.shot_events.length === 0 && (
-                <div className="flex flex-col items-center justify-center py-12 text-center">
-                  <AlertCircle className="mb-4 h-12 w-12 text-muted-foreground" />
-                  <p className="text-lg font-medium">
-                    {t("shotDetection.noShotsDetected")}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    {t("shotDetection.noShotsMessage")}
-                  </p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </>
-      )}
+      {data && <ShotDetectionResult data={data} />}
     </div>
   );
 }

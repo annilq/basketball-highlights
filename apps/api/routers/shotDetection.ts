@@ -91,7 +91,21 @@ export const shotDetectionRouter = router({
           );
         }
 
-        return detectionResult;
+        // Format the shot events to match the expected schema
+        const formattedShotEvents = detectionResult.shot_events.map(
+          (event) => ({
+            frame: event.frame,
+            is_make: event.is_make,
+            attempts: event.attempts,
+            makes: event.makes,
+          }),
+        );
+
+        // Return the shot detection with formatted shot events, matching getShot return type
+        return {
+          ...savedDetection[0],
+          shot_events: formattedShotEvents,
+        };
       } catch (error) {
         console.error("Error detecting shots:", error);
         throw error;
