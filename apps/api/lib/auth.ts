@@ -1,9 +1,9 @@
+import { passkey } from "@better-auth/passkey";
 import { schema as Db } from "@repo/db";
-import { createAuthMiddleware } from "better-auth/api";
 import { betterAuth } from "better-auth";
 import type { DB } from "better-auth/adapters/drizzle";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { passkey } from "@better-auth/passkey";
+import { createAuthMiddleware } from "better-auth/api";
 import { anonymous, organization } from "better-auth/plugins";
 import { emailOTP } from "better-auth/plugins/email-otp";
 import { sendOTP, sendPasswordReset, sendVerificationEmail } from "./email";
@@ -78,6 +78,15 @@ export function createAuth(
         verification: Db.verification,
       },
     }),
+
+    user: {
+      additionalFields: {
+        role: {
+          type: "string",
+          required: true,
+        },
+      },
+    },
 
     account: {
       modelName: "identity",

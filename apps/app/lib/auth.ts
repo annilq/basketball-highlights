@@ -34,5 +34,13 @@ export type AuthClient = typeof auth;
 // Inferred types from configured instance - includes plugin extensions
 // $Infer.Session is the full response shape { user, session }
 type SessionResponse = typeof auth.$Infer.Session;
-export type User = SessionResponse["user"];
+
+// Extract user type first
+type BaseUser = SessionResponse["user"];
+
+// Extend User type to include role field
+export interface User extends BaseUser {
+  role: string;
+}
+
 export type Session = SessionResponse["session"];

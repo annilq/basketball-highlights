@@ -15,6 +15,13 @@
       "when": 1769061112513,
       "tag": "0001_complete_yellow_claw",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1769230199392,
+      "tag": "0002_peaceful_the_liberteens",
+      "breakpoints": true
     }
   ]
 }
