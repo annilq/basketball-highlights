@@ -1,4 +1,3 @@
-import { ShotDetectionResult } from "@/components/shotDetection/shotResult";
 import { useI18n } from "@/lib/i18n";
 import { useDetectShotsMutation } from "@/lib/queries/shot-detection";
 import {
@@ -10,11 +9,10 @@ import {
   CardTitle,
   Input,
   Label,
-  Skeleton,
 } from "@repo/ui";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { AlertCircle, Film, TrendingUp, Upload } from "lucide-react";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 
 export const Route = createFileRoute("/(app)/shot-detection")({
@@ -27,6 +25,7 @@ function ShotDetectionPage() {
   const [videoUrl, setVideoUrl] = React.useState<string | undefined>();
   const videoUrlRef = React.useRef<HTMLInputElement>(null);
   const detectShotsMutation = useDetectShotsMutation();
+  const navigate = useNavigate();
 
   // Upload video to Hono API and return URL
   const uploadVideo = async (file: File): Promise<string> => {
@@ -93,6 +92,16 @@ function ShotDetectionPage() {
   const { data, status, error } = detectShotsMutation;
   const isPending = status === "pending";
   const isError = status === "error";
+
+  // Navigate to shot detail page when detection is complete
+  useEffect(() => {
+    if (data?.id) {
+      navigate({
+        to: "/shotdetectiondetail/$shotId",
+        params: { shotId: data.id },
+      });
+    }
+  }, [data, navigate]);
 
   return (
     <div className="container mx-auto py-4">
@@ -246,39 +255,6 @@ function ShotDetectionPage() {
           )}
         </CardContent>
       </Card>
-
-      {isPending && (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t("shotDetection.processingVideo")}</CardTitle>
-            <CardDescription>
-              {t("shotDetection.processingDescription")}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-3/4" />
-              </div>
-              <Skeleton className="h-32 w-full" />
-              <div className="grid grid-cols-3 gap-4">
-                <Skeleton className="h-16 w-full" />
-                <Skeleton className="h-16 w-full" />
-                <Skeleton className="h-16 w-full" />
-              </div>
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-2/3" />
-                <Skeleton className="h-4 w-5/6" />
-                <Skeleton className="h-4 w-4/5" />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {data && <ShotDetectionResult data={data} />}
     </div>
   );
 }
